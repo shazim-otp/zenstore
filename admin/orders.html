@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Orders - Zen Store Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon" style="width:32px; height:32px; font-size:1.1rem;">Z</div>
+      <div class="sidebar-brand-title">Zen<span>Admin</span></div>
+    </div>
+
+    <nav class="sidebar-menu">
+      <div class="menu-category-title">Core Management</div>
+      <a href="index.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg><span>Dashboard Overview</span></a>
+      <a href="orders.html" class="sidebar-link active"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg><span>Orders</span></a>
+      <a href="products.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg><span>Products</span></a>
+      <a href="add-product.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg><span>Add Product (Live Preview)</span></a>
+
+      <div class="menu-category-title">Operations & Network</div>
+      <a href="suppliers.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg><span>Suppliers</span></a>
+      <a href="inventory.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span>Inventory Stock</span></a>
+      <a href="customers.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg><span>Customers</span></a>
+
+      <div class="menu-category-title">Financial & Analytics</div>
+      <a href="analytics.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg><span>Profit & Loss Analytics</span></a>
+      <a href="settings.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span>Settings</span></a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <header class="admin-topbar">
+      <div>
+        <h1 class="page-header-title">Master Orders Management</h1>
+        <p style="color:var(--text-muted); font-size:0.85rem;">Track customer orders, supplier fulfillment status, and order P&L metrics</p>
+      </div>
+    </header>
+
+    <div class="admin-content">
+
+      <!-- Table Card -->
+      <div class="table-card">
+        <div class="table-toolbar">
+          <input type="text" id="order-search-input" class="form-control" placeholder="Search by Order ID or Customer Name..." style="max-width:320px;" oninput="filterOrdersTable()">
+
+          <select id="filter-order-status" class="form-control form-select" style="width:auto;" onchange="filterOrdersTable()">
+            <option value="">All Fulfillment Statuses</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Processing">Processing</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+          </select>
+        </div>
+
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Total Revenue</th>
+                <th>Supplier Cost</th>
+                <th>Net Profit</th>
+                <th>Payment</th>
+                <th>Fulfillment Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-orders-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Core Scripts -->
+  <script src="../js/database.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let allOrders = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Auth.requireRole(['admin'])) return;
+
+      allOrders = ZenDB.getOrders();
+      renderOrdersTable(allOrders);
+
+      // Check if URL has specific order ID
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetId = urlParams.get('id');
+      if (targetId) openOrderDetailModal(targetId);
+    });
+
+    function filterOrdersTable() {
+      const q = document.getElementById('order-search-input').value.toLowerCase().trim();
+      const status = document.getElementById('filter-order-status').value;
+
+      let filtered = [...allOrders];
+      if (q) {
+        filtered = filtered.filter(o => o.id.toLowerCase().includes(q) || o.customerName.toLowerCase().includes(q));
+      }
+      if (status) {
+        filtered = filtered.filter(o => o.orderStatus === status);
+      }
+
+      renderOrdersTable(filtered);
+    }
+
+    function renderOrdersTable(orders) {
+      const tbody = document.getElementById('admin-orders-tbody');
+
+      if (!orders || orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:2rem; color:var(--text-muted);">No matching orders found</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = orders.map(o => `
+        <tr>
+          <td style="font-weight:800; color:var(--primary);">${o.id}</td>
+          <td style="font-size:0.85rem;">${Utils.formatDate(o.createdAt)}</td>
+          <td>
+            <div style="font-weight:700;">${o.customerName}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">${o.customerPhone || o.customerEmail}</div>
+          </td>
+          <td style="font-weight:800;">${Utils.formatINR(o.total)}</td>
+          <td style="color:var(--text-muted);">${Utils.formatINR(o.totalBuyCost)}</td>
+          <td style="font-weight:800; color:var(--success);">${Utils.formatINR(o.totalProfit)}</td>
+          <td><span class="badge badge-${o.paymentStatus === 'Paid' ? 'success' : 'warning'}">${o.paymentStatus} (${o.paymentMethod})</span></td>
+          <td>
+            <select class="form-control form-select" style="padding:0.2rem 0.5rem; font-size:0.8rem; font-weight:700;" onchange="changeOrderStatus('${o.id}', this.value)">
+              <option value="Confirmed" ${o.orderStatus === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+              <option value="Processing" ${o.orderStatus === 'Processing' ? 'selected' : ''}>Processing</option>
+              <option value="Shipped" ${o.orderStatus === 'Shipped' ? 'selected' : ''}>Shipped</option>
+              <option value="Delivered" ${o.orderStatus === 'Delivered' ? 'selected' : ''}>Delivered</option>
+            </select>
+          </td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="openOrderDetailModal('${o.id}')">Inspect</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function changeOrderStatus(orderId, newStatus) {
+      ZenDB.updateOrderStatus(orderId, newStatus);
+      allOrders = ZenDB.getOrders();
+      filterOrdersTable();
+      Utils.showToast(`Order #${orderId} status updated to ${newStatus}`, 'success');
+    }
+
+    function openOrderDetailModal(orderId) {
+      const o = ZenDB.getOrderById(orderId);
+      if (!o) return;
+
+      const bodyHTML = `
+        <div style="display:flex; flex-direction:column; gap:1.25rem;">
+          <div style="background:var(--surface-alt); padding:1rem; border-radius:var(--radius-md); font-size:0.9rem;">
+            <div style="font-weight:700; margin-bottom:0.25rem;">Shipping Address:</div>
+            <div>${o.customerName} - ${o.customerPhone}</div>
+            <div style="color:var(--text-muted);">${o.shippingAddress.house}, ${o.shippingAddress.area}, ${o.shippingAddress.city}, ${o.shippingAddress.state} - ${o.shippingAddress.pin}</div>
+          </div>
+
+          <div style="border-top:1px solid var(--border); padding-top:1rem;">
+            <div style="font-weight:700; font-size:0.95rem; margin-bottom:0.75rem;">Line Items & Profit Breakdown:</div>
+            ${o.items.map(item => `
+              <div style="display:flex; align-items:center; gap:1rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem; margin-bottom:0.75rem;">
+                <img src="${item.image}" style="width:48px; height:48px; border-radius:4px; object-fit:cover;">
+                <div style="flex-grow:1;">
+                  <div style="font-weight:700; font-size:0.9rem;">${item.name}</div>
+                  <div style="font-size:0.785rem; color:var(--text-muted);">Qty: ${item.qty} | Buy Price: ${Utils.formatINR(item.buyPrice)} | Selling: ${Utils.formatINR(item.sellingPrice)}</div>
+                </div>
+                <div style="font-weight:800; color:var(--success);">+${Utils.formatINR(item.profit * item.qty)} Profit</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div style="background:linear-gradient(135deg, #EEF2FF 0%, #ECFEFF 100%); padding:1rem; border-radius:var(--radius-md); border:1px solid #C7D2FE; display:grid; grid-template-columns:repeat(3, 1fr); text-align:center;">
+            <div><div style="font-size:0.75rem; color:var(--text-muted);">Total Revenue</div><div style="font-weight:800; font-size:1.1rem;">${Utils.formatINR(o.total)}</div></div>
+            <div><div style="font-size:0.75rem; color:var(--text-muted);">Total Buy Cost</div><div style="font-weight:800; font-size:1.1rem; color:var(--text-muted);">${Utils.formatINR(o.totalBuyCost)}</div></div>
+            <div><div style="font-size:0.75rem; color:var(--text-muted);">Net Profit</div><div style="font-weight:800; font-size:1.1rem; color:var(--success);">${Utils.formatINR(o.totalProfit)}</div></div>
+          </div>
+        </div>
+      `;
+
+      Utils.openModal(`Order Details #${o.id}`, bodyHTML, `<button class="btn btn-secondary" onclick="Utils.closeModal()">Close</button>`, 'modal-card-lg');
+    }
+  </script>
+</body>
+</html>

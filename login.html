@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Zen Store</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/storefront.css">
+</head>
+<body style="background:linear-gradient(135deg, #111827 0%, #31103F 50%, #111827 100%); display:flex; align-items:center; justify-content:center; padding:2rem 1rem;">
+
+  <div style="max-width:460px; width:100%;">
+
+    <!-- Brand Header -->
+    <div style="text-align:center; margin-bottom:2rem;">
+      <a href="index.html" class="logo-brand" style="justify-content:center; color:#FFF; font-size:2rem;">
+        <div class="logo-icon">Z</div>
+        <div class="logo-text">Zen<span style="color:var(--secondary);">Store</span></div>
+      </a>
+      <p style="color:#94A3B8; font-size:0.9rem; margin-top:0.5rem;">Access Storefront, Admin Dashboard, or Supplier Portal</p>
+    </div>
+
+    <!-- Quick Demo Login Bar -->
+    <div style="background:rgba(255,255,255,0.08); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.15); border-radius:var(--radius-lg); padding:1rem; margin-bottom:1.5rem; text-align:center;">
+      <div style="font-size:0.75rem; font-weight:700; color:var(--secondary); text-transform:uppercase; letter-spacing:1px; margin-bottom:0.75rem;">⚡ 1-Click Demo Testing Logins</div>
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.5rem;">
+        <button onclick="Auth.demoLogin('customer')" class="btn btn-sm" style="background:#38BDF8; color:#0F172A;">Customer</button>
+        <button onclick="Auth.demoLogin('admin')" class="btn btn-sm" style="background:#818CF8; color:#FFF;">👑 Admin</button>
+        <button onclick="Auth.demoLogin('supplier')" class="btn btn-sm" style="background:#34D399; color:#0F172A;">📦 Supplier</button>
+      </div>
+    </div>
+
+    <!-- Login Card -->
+    <div class="card" style="padding:2rem; box-shadow:var(--shadow-xl);">
+      <h2 style="font-size:1.5rem; font-weight:800; margin-bottom:1.5rem; text-align:center;">Sign In to Account</h2>
+
+      <form id="login-form" onsubmit="handleLoginSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="login-email" class="form-control" placeholder="user@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top:1rem;">
+          Sign In
+        </button>
+      </form>
+
+      <div style="text-align:center; margin-top:1.5rem; border-top:1px solid var(--border); padding-top:1rem; font-size:0.9rem; color:var(--text-muted);">
+        Don't have a customer account? <a href="register.html" style="font-weight:700;">Create Account</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Core Scripts -->
+  <script src="js/database.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-password').value;
+
+      const res = Auth.login(email, pass);
+      if (res.success) {
+        setTimeout(() => {
+          if (res.user.role === 'admin') window.location.href = '/admin/index.html';
+          else if (res.user.role === 'supplier') window.location.href = '/supplier/index.html';
+          else window.location.href = '/index.html';
+        }, 600);
+      } else {
+        Utils.showToast(res.message, 'error');
+      }
+    }
+  </script>
+</body>
+</html>

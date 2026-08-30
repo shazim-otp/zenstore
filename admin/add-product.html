@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product (Live Preview) - Zen Store Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/storefront.css">
+</head>
+<body class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon" style="width:32px; height:32px; font-size:1.1rem;">Z</div>
+      <div class="sidebar-brand-title">Zen<span>Admin</span></div>
+    </div>
+
+    <nav class="sidebar-menu">
+      <div class="menu-category-title">Core Management</div>
+      <a href="index.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+        <span>Dashboard Overview</span>
+      </a>
+      <a href="orders.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <span>Orders</span>
+      </a>
+      <a href="products.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        <span>Products</span>
+      </a>
+      <a href="add-product.html" class="sidebar-link active">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        <span>Add Product (Live Preview)</span>
+      </a>
+
+      <div class="menu-category-title">Operations & Network</div>
+      <a href="suppliers.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        <span>Suppliers</span>
+      </a>
+      <a href="inventory.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <span>Inventory Stock</span>
+      </a>
+      <a href="customers.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        <span>Customers</span>
+      </a>
+
+      <div class="menu-category-title">Financial & Analytics</div>
+      <a href="analytics.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <span>Profit & Loss Analytics</span>
+      </a>
+      <a href="settings.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <span>Settings</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <header class="admin-topbar">
+      <div>
+        <h1 class="page-header-title" id="page-title-heading">Create New Dropshipping Product</h1>
+        <p style="color:var(--text-muted); font-size:0.85rem;">Enter product parameters and inspect real-time profit margins with live desktop card preview</p>
+      </div>
+
+      <div class="admin-topbar-actions">
+        <a href="products.html" class="btn btn-secondary btn-sm">Cancel</a>
+        <button class="btn btn-primary btn-sm" onclick="saveProductForm()">Publish Product</button>
+      </div>
+    </header>
+
+    <div class="admin-content">
+
+      <!-- Desktop Split View Layout -->
+      <div class="add-product-split">
+
+        <!-- LEFT FORM (65%) -->
+        <div>
+
+          <!-- Basic Information Card -->
+          <div class="card" style="padding:1.5rem; margin-bottom:1.5rem;">
+            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.25rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">1. Basic Product Information</h3>
+
+            <div class="form-group">
+              <label class="form-label">Product Title / Name <span class="required">*</span></label>
+              <input type="text" id="inp-name" class="form-control" placeholder="e.g. ZenPods Pro Wireless Earbuds" oninput="updateLivePreview()" required>
+            </div>
+
+            <div class="grid grid-cols-2">
+              <div class="form-group">
+                <label class="form-label">Category <span class="required">*</span></label>
+                <select id="inp-category" class="form-control form-select" onchange="updateLivePreview()">
+                  <!-- Categories rendered dynamically -->
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Brand Name</label>
+                <input type="text" id="inp-brand" class="form-control" placeholder="e.g. Zen Store" oninput="updateLivePreview()">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2">
+              <div class="form-group">
+                <label class="form-label">SKU Code <span class="required">*</span></label>
+                <input type="text" id="inp-sku" class="form-control" placeholder="e.g. ZP-ANC-01">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Assigned Supplier <span class="required">*</span></label>
+                <select id="inp-supplier" class="form-control form-select">
+                  <!-- Suppliers rendered dynamically -->
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Short Description</label>
+              <input type="text" id="inp-short-desc" class="form-control" placeholder="High impact 1-line headline" oninput="updateLivePreview()">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Full Detailed Description</label>
+              <textarea id="inp-desc" class="form-control" placeholder="Rich product details..."></textarea>
+            </div>
+          </div>
+
+          <!-- Product Media Upload UI -->
+          <div class="card" style="padding:1.5rem; margin-bottom:1.5rem;">
+            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.25rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">2. Media & Product Images</h3>
+            
+            <div class="form-group">
+              <label class="form-label">Image URL / Main Image Link</label>
+              <input type="url" id="inp-image-url" class="form-control" placeholder="https://images.unsplash.com/..." oninput="updateLivePreview()">
+            </div>
+
+            <div style="border:2px dashed var(--border); border-radius:var(--radius-md); padding:2rem; text-align:center; background:var(--surface-alt); margin-bottom:1rem; cursor:pointer;" id="drop-zone" onclick="document.getElementById('file-upload-input').click()">
+              <div style="font-size:2.5rem; margin-bottom:0.5rem;">📷</div>
+              <div style="font-weight:700; font-size:0.95rem;">Drag & Drop Product Images Here</div>
+              <div style="font-size:0.8rem; color:var(--text-muted);">or click to browse local files (PNG, JPG, WebP)</div>
+              <input type="file" id="file-upload-input" accept="image/*" style="display:none;" onchange="handleFileUpload(event)">
+            </div>
+          </div>
+
+          <!-- Real-Time Profit Calculator Card -->
+          <div class="card" style="padding:1.5rem; margin-bottom:1.5rem;">
+            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.25rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">3. Pricing & Dropshipping Cost Structure</h3>
+
+            <div class="grid grid-cols-3">
+              <div class="form-group">
+                <label class="form-label">MRP (Max Retail) <span class="required">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input type="number" id="inp-mrp" class="form-control" value="2999" oninput="calculateProfit(); updateLivePreview();" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Selling Price <span class="required">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input type="number" id="inp-selling-price" class="form-control" value="1899" oninput="calculateProfit(); updateLivePreview();" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Supplier Buy Price <span class="required">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input type="number" id="inp-buy-price" class="form-control" value="850" oninput="calculateProfit();" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3">
+              <div class="form-group">
+                <label class="form-label">Shipping Cost</label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input type="number" id="inp-shipping-cost" class="form-control" value="80" oninput="calculateProfit();">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Platform Fee</label>
+                <div class="input-group">
+                  <span class="input-group-text">₹</span>
+                  <input type="number" id="inp-platform-fee" class="form-control" value="30" oninput="calculateProfit();">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">GST Tax Rate (%)</label>
+                <div class="input-group">
+                  <input type="number" id="inp-tax-rate" class="form-control" value="18" oninput="calculateProfit();">
+                  <span class="input-group-text">%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Real-Time Profit Calculation Output Highlight Panel -->
+            <div class="profit-calc-card">
+              <div class="profit-metric-box">
+                <span class="profit-metric-label">Customer Discount</span>
+                <span class="profit-metric-value" id="calc-discount">₹1,100</span>
+              </div>
+              <div class="profit-metric-box">
+                <span class="profit-metric-label">Estimated Net Profit</span>
+                <span class="profit-metric-value positive" id="calc-profit">₹597</span>
+              </div>
+              <div class="profit-metric-box">
+                <span class="profit-metric-label">Profit Margin %</span>
+                <span class="profit-metric-value positive" id="calc-margin">31.44%</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Inventory Control -->
+          <div class="card" style="padding:1.5rem; margin-bottom:1.5rem;">
+            <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:1.25rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">4. Inventory & Stock Control</h3>
+            
+            <div class="grid grid-cols-2">
+              <div class="form-group">
+                <label class="form-label">Initial Stock Quantity <span class="required">*</span></label>
+                <input type="number" id="inp-stock" class="form-control" value="50" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Low Stock Threshold Alert</label>
+                <input type="number" id="inp-low-stock" class="form-control" value="10">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT LIVE PREVIEW (35%) -->
+        <div>
+          <div class="live-preview-card">
+            <div class="live-preview-badge">✨ REAL-TIME STOREFRONT PREVIEW</div>
+            
+            <!-- Live Preview Card Rendering -->
+            <div id="live-card-preview" class="product-card" style="box-shadow:none;">
+              <div class="product-badge-discount" id="prev-badge-discount">36% OFF</div>
+              <div class="product-img-wrapper">
+                <img id="prev-img" src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80" class="product-img">
+              </div>
+              <div class="product-info">
+                <div class="product-category-brand" id="prev-brand">Zen Store</div>
+                <div class="product-title-link" id="prev-title" style="font-weight:700;">ZenPods Pro Wireless Earbuds</div>
+                <div class="product-rating">★ 4.8 <span class="product-rating-count">(New)</span></div>
+                <div class="product-pricing-row">
+                  <span class="price-selling" id="prev-selling">₹1,899</span>
+                  <span class="price-mrp" id="prev-mrp">₹2,999</span>
+                </div>
+                <button class="btn btn-primary btn-add-cart btn-block" disabled>Add to Cart</button>
+              </div>
+            </div>
+
+            <div style="margin-top:1.5rem; background:var(--surface-alt); padding:1rem; border-radius:var(--radius-md); font-size:0.8rem; color:var(--text-muted);">
+              💡 <strong>Instant Sync:</strong> Edits in title, brand, image URL, MRP, and selling price reflect in this preview immediately.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Core Scripts -->
+  <script src="../js/database.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let editingProductId = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Auth.requireRole(['admin'])) return;
+
+      populateDropdowns();
+
+      // Check if Editing existing product
+      const urlParams = new URLSearchParams(window.location.search);
+      editingProductId = urlParams.get('id');
+      if (editingProductId) {
+        document.getElementById('page-title-heading').textContent = 'Edit Product Parameters';
+        loadProductData(editingProductId);
+      } else {
+        calculateProfit();
+      }
+    });
+
+    function populateDropdowns() {
+      const catSelect = document.getElementById('inp-category');
+      const supSelect = document.getElementById('inp-supplier');
+
+      catSelect.innerHTML = ZenDB.getCategories().map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+      supSelect.innerHTML = ZenDB.getSuppliers().map(s => `<option value="${s.id}">${s.companyName} (${s.name})</option>`).join('');
+    }
+
+    function calculateProfit() {
+      const mrp = Number(document.getElementById('inp-mrp').value) || 0;
+      const selling = Number(document.getElementById('inp-selling-price').value) || 0;
+      const buy = Number(document.getElementById('inp-buy-price').value) || 0;
+      const shipping = Number(document.getElementById('inp-shipping-cost').value) || 0;
+      const platform = Number(document.getElementById('inp-platform-fee').value) || 0;
+      const taxRate = Number(document.getElementById('inp-tax-rate').value) || 0;
+
+      const discount = Math.max(0, mrp - selling);
+      const taxAmount = Math.round(selling * (taxRate / 100));
+      const profit = selling - buy - shipping - platform - taxAmount;
+      const margin = selling > 0 ? (profit / selling) * 100 : 0;
+
+      document.getElementById('calc-discount').textContent = Utils.formatINR(discount);
+
+      const profitEl = document.getElementById('calc-profit');
+      profitEl.textContent = Utils.formatINR(profit);
+      profitEl.className = profit >= 0 ? 'profit-metric-value positive' : 'profit-metric-value negative';
+
+      const marginEl = document.getElementById('calc-margin');
+      marginEl.textContent = Utils.formatPercent(margin);
+      marginEl.className = margin >= 20 ? 'profit-metric-value positive' : margin >= 10 ? 'profit-metric-value warning' : 'profit-metric-value negative';
+    }
+
+    function updateLivePreview() {
+      const title = document.getElementById('inp-name').value || 'Product Title Preview';
+      const brand = document.getElementById('inp-brand').value || 'Zen Store';
+      const imgUrl = document.getElementById('inp-image-url').value || 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80';
+      const mrp = Number(document.getElementById('inp-mrp').value) || 2999;
+      const selling = Number(document.getElementById('inp-selling-price').value) || 1899;
+
+      const discountPercent = mrp > selling ? Math.round(((mrp - selling) / mrp) * 100) : 0;
+
+      document.getElementById('prev-title').textContent = title;
+      document.getElementById('prev-brand').textContent = brand;
+      document.getElementById('prev-img').src = imgUrl;
+      document.getElementById('prev-mrp').textContent = Utils.formatINR(mrp);
+      document.getElementById('prev-selling').textContent = Utils.formatINR(selling);
+      document.getElementById('prev-badge-discount').textContent = `${discountPercent}% OFF`;
+    }
+
+    async function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const base64 = await Utils.fileToBase64(file);
+        document.getElementById('inp-image-url').value = base64;
+        updateLivePreview();
+        Utils.showToast('Product image uploaded successfully!', 'success');
+      }
+    }
+
+    function saveProductForm() {
+      const name = document.getElementById('inp-name').value.trim();
+      const sku = document.getElementById('inp-sku').value.trim();
+
+      if (!name || !sku) {
+        Utils.showToast('Please fill in required fields (Name & SKU)', 'error');
+        return;
+      }
+
+      const mrp = Number(document.getElementById('inp-mrp').value) || 0;
+      const sellingPrice = Number(document.getElementById('inp-selling-price').value) || 0;
+      const buyPrice = Number(document.getElementById('inp-buy-price').value) || 0;
+      const shippingCost = Number(document.getElementById('inp-shipping-cost').value) || 0;
+      const platformFee = Number(document.getElementById('inp-platform-fee').value) || 0;
+      const taxRate = Number(document.getElementById('inp-tax-rate').value) || 18;
+
+      const tax = Math.round(sellingPrice * (taxRate / 100));
+      const profit = sellingPrice - buyPrice - shippingCost - platformFee - tax;
+      const profitMargin = sellingPrice > 0 ? (profit / sellingPrice) * 100 : 0;
+
+      const img = document.getElementById('inp-image-url').value.trim() || 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80';
+
+      const productData = {
+        id: editingProductId || 'PROD-' + Math.floor(1000 + Math.random() * 9000),
+        name,
+        slug: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        shortDescription: document.getElementById('inp-short-desc').value,
+        description: document.getElementById('inp-desc').value,
+        sku,
+        categoryId: document.getElementById('inp-category').value,
+        brand: document.getElementById('inp-brand').value || 'Zen Store',
+        supplierId: document.getElementById('inp-supplier').value,
+        status: 'Active',
+        mrp,
+        sellingPrice,
+        buyPrice,
+        shippingCost,
+        platformFee,
+        tax,
+        profit,
+        profitMargin,
+        stock: Number(document.getElementById('inp-stock').value) || 50,
+        lowStockThreshold: Number(document.getElementById('inp-low-stock').value) || 10,
+        mainImage: img,
+        images: [img]
+      };
+
+      ZenDB.saveProduct(productData);
+      Utils.showToast('Product published successfully!', 'success');
+      setTimeout(() => window.location.href = 'products.html', 800);
+    }
+
+    function loadProductData(id) {
+      const p = ZenDB.getProductById(id);
+      if (!p) return;
+
+      document.getElementById('inp-name').value = p.name;
+      document.getElementById('inp-brand').value = p.brand;
+      document.getElementById('inp-sku').value = p.sku;
+      document.getElementById('inp-short-desc').value = p.shortDescription || '';
+      document.getElementById('inp-desc').value = p.description || '';
+      document.getElementById('inp-category').value = p.categoryId;
+      document.getElementById('inp-supplier').value = p.supplierId;
+      document.getElementById('inp-image-url').value = p.mainImage;
+      document.getElementById('inp-mrp').value = p.mrp;
+      document.getElementById('inp-selling-price').value = p.sellingPrice;
+      document.getElementById('inp-buy-price').value = p.buyPrice;
+      document.getElementById('inp-shipping-cost').value = p.shippingCost;
+      document.getElementById('inp-platform-fee').value = p.platformFee;
+      document.getElementById('inp-stock').value = p.stock;
+
+      calculateProfit();
+      updateLivePreview();
+    }
+  </script>
+</body>
+</html>

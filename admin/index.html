@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Admin Dashboard - Zen Store</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon" style="width:32px; height:32px; font-size:1.1rem;">Z</div>
+      <div class="sidebar-brand-title">Zen<span>Admin</span></div>
+    </div>
+
+    <nav class="sidebar-menu">
+      <div class="menu-category-title">Core Management</div>
+      <a href="index.html" class="sidebar-link active">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+        <span>Dashboard Overview</span>
+      </a>
+      <a href="orders.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <span>Orders</span>
+      </a>
+      <a href="products.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        <span>Products</span>
+      </a>
+      <a href="add-product.html" class="sidebar-link" style="color:#818CF8; font-weight:700;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        <span>Add Product (Live Preview)</span>
+      </a>
+
+      <div class="menu-category-title">Operations & Network</div>
+      <a href="suppliers.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        <span>Suppliers</span>
+      </a>
+      <a href="inventory.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <span>Inventory Stock</span>
+      </a>
+      <a href="customers.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        <span>Customers</span>
+      </a>
+
+      <div class="menu-category-title">Financial & Analytics</div>
+      <a href="analytics.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <span>Profit & Loss Analytics</span>
+      </a>
+      <a href="settings.html" class="sidebar-link">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-profile-badge">
+        <div class="user-avatar">A</div>
+        <div class="user-info">
+          <div class="user-name">Zen Admin</div>
+          <div class="user-role">Store Owner</div>
+        </div>
+      </div>
+      <button onclick="Auth.logout()" class="btn-icon" style="color:#94A3B8;" title="Logout">🚪</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    
+    <!-- Topbar -->
+    <header class="admin-topbar">
+      <div>
+        <h1 class="page-header-title">Dashboard Overview</h1>
+        <p style="color:var(--text-muted); font-size:0.85rem;">Real-time business sales, order fulfillment, and net profit metrics</p>
+      </div>
+
+      <div class="admin-topbar-actions">
+        <a href="../index.html" class="btn btn-outline btn-sm" target="_blank">🌐 View Storefront</a>
+        <a href="add-product.html" class="btn btn-primary btn-sm">+ Add New Product</a>
+      </div>
+    </header>
+
+    <!-- Content Body -->
+    <div class="admin-content">
+
+      <!-- 8 Overview Stat Cards -->
+      <div class="stat-cards-grid">
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">Total Revenue</span>
+            <div class="stat-card-icon icon-purple">💰</div>
+          </div>
+          <div class="stat-card-value" id="stat-revenue">₹0</div>
+          <div class="stat-card-footer stat-trend-up">↑ +14.5% vs last week</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">Net Profit</span>
+            <div class="stat-card-icon icon-emerald">📈</div>
+          </div>
+          <div class="stat-card-value" id="stat-profit" style="color:var(--success);">₹0</div>
+          <div class="stat-card-footer stat-trend-up" id="stat-margin-badge">39.2% Net Margin</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">Total Orders</span>
+            <div class="stat-card-icon icon-cyan">🛍️</div>
+          </div>
+          <div class="stat-card-value" id="stat-orders">0</div>
+          <div class="stat-card-footer stat-trend-up">↑ +8 new orders today</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">Pending Orders</span>
+            <div class="stat-card-icon icon-amber">⏳</div>
+          </div>
+          <div class="stat-card-value" id="stat-pending">0</div>
+          <div class="stat-card-footer" style="color:var(--warning);">Requires Supplier Action</div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div style="display:grid; grid-template-columns:2fr 1fr; gap:1.5rem; margin-bottom:2rem;">
+        <div class="chart-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+            <h3 style="font-size:1.1rem; font-weight:700;">Revenue & Net Profit Trend</h3>
+            <span class="badge badge-primary">Last 7 Days</span>
+          </div>
+          <div id="revenue-line-chart" class="chart-svg-container"></div>
+        </div>
+
+        <div class="chart-card">
+          <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:1rem;">Order Status Breakdown</h3>
+          <div id="status-donut-chart" style="display:flex; flex-direction:column; gap:0.75rem; justify-content:center; height:240px;">
+            <!-- Status badges rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Orders Table -->
+      <div class="table-card">
+        <div class="table-toolbar">
+          <h3 style="font-size:1.1rem; font-weight:700;">Recent Customer Orders</h3>
+          <a href="orders.html" class="btn btn-outline btn-sm">View All Orders →</a>
+        </div>
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total Revenue</th>
+                <th>Buy Cost</th>
+                <th>Net Profit</th>
+                <th>Payment</th>
+                <th>Fulfillment</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="recent-orders-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Core Scripts -->
+  <script src="../js/database.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Require Admin Role
+      if (!Auth.requireRole(['admin'])) return;
+
+      renderDashboardStats();
+    });
+
+    function renderDashboardStats() {
+      const orders = ZenDB.getOrders();
+      
+      let totalRevenue = 0;
+      let totalBuyCost = 0;
+      let totalProfit = 0;
+      let pendingCount = 0;
+
+      orders.forEach(o => {
+        totalRevenue += (o.total || 0);
+        totalBuyCost += (o.totalBuyCost || 0);
+        totalProfit += (o.totalProfit || 0);
+        if (o.orderStatus === 'Pending' || o.orderStatus === 'Processing') pendingCount++;
+      });
+
+      const netMargin = totalRevenue > 0 ? ((totalProfit / totalRevenue) * 100).toFixed(1) : 0;
+
+      document.getElementById('stat-revenue').textContent = Utils.formatINR(totalRevenue);
+      document.getElementById('stat-profit').textContent = Utils.formatINR(totalProfit);
+      document.getElementById('stat-orders').textContent = orders.length;
+      document.getElementById('stat-pending').textContent = pendingCount;
+      document.getElementById('stat-margin-badge').textContent = `Margin: ${netMargin}%`;
+
+      // Render Revenue Line Chart (SVG)
+      const dataPoints = [4200, 6800, 9500, 12400, 15800, 18900, totalRevenue || 22000];
+      const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      Utils.renderSVGLineChart('revenue-line-chart', dataPoints, labels);
+
+      // Render Order Status Breakdown
+      const statusCounts = {
+        Delivered: orders.filter(o => o.orderStatus === 'Delivered').length,
+        Shipped: orders.filter(o => o.orderStatus === 'Shipped').length,
+        Processing: orders.filter(o => o.orderStatus === 'Processing').length,
+        Confirmed: orders.filter(o => o.orderStatus === 'Confirmed').length
+      };
+
+      document.getElementById('status-donut-chart').innerHTML = Object.keys(statusCounts).map(status => `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; background:var(--surface-alt); border-radius:var(--radius-md);">
+          <span class="status-pill ${status.toLowerCase()}">${status}</span>
+          <span style="font-weight:800; font-size:1.1rem;">${statusCounts[status]} orders</span>
+        </div>
+      `).join('');
+
+      // Render Recent Orders Table
+      const tbody = document.getElementById('recent-orders-tbody');
+      tbody.innerHTML = orders.slice(0, 5).map(o => `
+        <tr>
+          <td style="font-weight:800; color:var(--primary);">${o.id}</td>
+          <td>
+            <div style="font-weight:700;">${o.customerName}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">${o.customerEmail}</div>
+          </td>
+          <td>${o.items ? o.items.length : 0} line items</td>
+          <td style="font-weight:700;">${Utils.formatINR(o.total)}</td>
+          <td style="color:var(--text-muted);">${Utils.formatINR(o.totalBuyCost)}</td>
+          <td style="font-weight:800; color:var(--success);">${Utils.formatINR(o.totalProfit)}</td>
+          <td><span class="badge badge-${o.paymentStatus === 'Paid' ? 'success' : 'warning'}">${o.paymentStatus}</span></td>
+          <td><span class="status-pill ${o.orderStatus.toLowerCase()}">${o.orderStatus}</span></td>
+          <td>
+            <a href="orders.html?id=${o.id}" class="btn btn-secondary btn-sm">View Details</a>
+          </td>
+        </tr>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Zen Store</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/storefront.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo-brand">
+        <div class="logo-icon">Z</div>
+        <div class="logo-text">Zen<span>Store</span></div>
+      </a>
+      <div style="font-weight:700; font-size:1.1rem; color:var(--text-muted);">🔒 Secure 256-Bit SSL Checkout</div>
+    </div>
+  </header>
+
+  <!-- Checkout Main Grid -->
+  <main style="max-width:1280px; margin:2rem auto; padding:0 1.5rem; flex-grow:1;">
+    <h1 style="font-size:1.8rem; font-weight:800; margin-bottom:1.5rem;">Checkout & Place Order</h1>
+
+    <form id="checkout-form" onsubmit="handlePlaceOrder(event)" style="display:grid; grid-template-columns:1fr 420px; gap:2rem; align-items:start;">
+
+      <!-- Left Column: Shipping Address & Payment Selection -->
+      <div>
+
+        <!-- Section 1: Shipping Address -->
+        <div class="card" style="padding:1.5rem; margin-bottom:2rem;">
+          <h3 style="font-size:1.25rem; font-weight:800; margin-bottom:1.25rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">1. Delivery Shipping Address</h3>
+          
+          <div class="grid grid-cols-2">
+            <div class="form-group">
+              <label class="form-label">Full Name <span class="required">*</span></label>
+              <input type="text" id="cust-name" class="form-control" placeholder="Rahul Sharma" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mobile Phone Number <span class="required">*</span></label>
+              <input type="tel" id="cust-phone" class="form-control" placeholder="+91 98765 43210" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address <span class="required">*</span></label>
+            <input type="email" id="cust-email" class="form-control" placeholder="rahul.sharma@gmail.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">House / Flat No. & Building Name <span class="required">*</span></label>
+            <input type="text" id="cust-house" class="form-control" placeholder="Flat 402, Sunshine Heights" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Street / Area / Locality <span class="required">*</span></label>
+            <input type="text" id="cust-area" class="form-control" placeholder="Koramangala 4th Block" required>
+          </div>
+
+          <div class="grid grid-cols-3">
+            <div class="form-group">
+              <label class="form-label">City <span class="required">*</span></label>
+              <input type="text" id="cust-city" class="form-control" placeholder="Bengaluru" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">State <span class="required">*</span></label>
+              <input type="text" id="cust-state" class="form-control" placeholder="Karnataka" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">PIN Code <span class="required">*</span></label>
+              <input type="text" id="cust-pin" class="form-control" placeholder="560034" maxlength="6" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Payment Gateway Selection -->
+        <div class="card" style="padding:1.5rem;">
+          <h3 style="font-size:1.25rem; font-weight:800; margin-bottom:1.25rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">2. Select Payment Option</h3>
+
+          <div style="display:flex; flex-direction:column; gap:1rem;">
+
+            <!-- Payment Method 1: UPI -->
+            <label style="border:1.5px solid var(--border); border-radius:var(--radius-md); padding:1rem; display:flex; align-items:center; gap:1rem; cursor:pointer; background:var(--surface);" class="payment-option">
+              <input type="radio" name="payment-method" value="UPI" checked onclick="togglePaymentDetails('upi')">
+              <div style="flex-grow:1;">
+                <div style="font-weight:700; font-size:1rem;">Instant UPI / QR Code</div>
+                <div style="font-size:0.8rem; color:var(--text-muted);">Google Pay, PhonePe, Paytm, BHIM</div>
+              </div>
+              <span class="badge badge-success">Fastest</span>
+            </label>
+
+            <div id="payment-details-upi" style="background:var(--surface-alt); border:1px solid var(--border); border-radius:var(--radius-md); padding:1rem; display:block;">
+              <p style="font-size:0.85rem; margin-bottom:0.75rem; color:var(--text-muted);">Enter Virtual Payment Address (VPA) or scan simulated QR:</p>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="e.g. rahul@upi">
+                <span class="input-group-text">@upi</span>
+              </div>
+            </div>
+
+            <!-- Payment Method 2: Card -->
+            <label style="border:1.5px solid var(--border); border-radius:var(--radius-md); padding:1rem; display:flex; align-items:center; gap:1rem; cursor:pointer; background:var(--surface);" class="payment-option">
+              <input type="radio" name="payment-method" value="Card" onclick="togglePaymentDetails('card')">
+              <div style="flex-grow:1;">
+                <div style="font-weight:700; font-size:1rem;">Credit / Debit Card</div>
+                <div style="font-size:0.8rem; color:var(--text-muted);">Visa, MasterCard, RuPay, Maestro</div>
+              </div>
+            </label>
+
+            <div id="payment-details-card" style="background:var(--surface-alt); border:1px solid var(--border); border-radius:var(--radius-md); padding:1rem; display:none;">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Card Number (4532 XXXX XXXX 8920)">
+              </div>
+              <div class="grid grid-cols-2">
+                <input type="text" class="form-control" placeholder="MM / YY">
+                <input type="password" class="form-control" placeholder="CVV" maxlength="4">
+              </div>
+            </div>
+
+            <!-- Payment Method 3: COD -->
+            <label style="border:1.5px solid var(--border); border-radius:var(--radius-md); padding:1rem; display:flex; align-items:center; gap:1rem; cursor:pointer; background:var(--surface);" class="payment-option">
+              <input type="radio" name="payment-method" value="COD" onclick="togglePaymentDetails('cod')">
+              <div style="flex-grow:1;">
+                <div style="font-weight:700; font-size:1rem;">Cash on Delivery (COD)</div>
+                <div style="font-size:0.8rem; color:var(--text-muted);">Pay cash to delivery partner upon doorstep arrival</div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Order Summary & Place Order CTA -->
+      <div>
+        <div class="cart-summary-card">
+          <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:1rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">Items in Order</h3>
+          
+          <div id="checkout-items-list" style="display:flex; flex-direction:column; gap:0.75rem; max-height:260px; overflow-y:auto; margin-bottom:1rem;">
+            <!-- Cart items list rendered dynamically -->
+          </div>
+
+          <div style="border-top:1px solid var(--border); padding-top:1rem;">
+            <div class="summary-row"><span>Subtotal:</span><span id="chk-subtotal">₹0</span></div>
+            <div class="summary-row"><span>Shipping:</span><span id="chk-shipping">FREE</span></div>
+            <div class="summary-row"><span>GST Tax (18%):</span><span id="chk-tax">₹0</span></div>
+            <div class="summary-row total"><span>Payable Amount:</span><span id="chk-grand-total" style="color:var(--primary);">₹0</span></div>
+          </div>
+
+          <button type="submit" id="place-order-btn" class="btn btn-success btn-lg btn-block" style="margin-top:1.5rem;">
+            🔒 Authorize & Place Order
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </main>
+
+  <!-- Core Scripts -->
+  <script src="js/database.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const items = Cart.getCart();
+      if (!items || items.length === 0) {
+        Utils.showToast('Your cart is empty', 'warning');
+        window.location.href = '/shop.html';
+        return;
+      }
+
+      // Auto-fill logged-in customer info if available
+      const user = Auth.getCurrentUser();
+      if (user && user.role === 'customer') {
+        document.getElementById('cust-name').value = user.name || '';
+        document.getElementById('cust-email').value = user.email || '';
+        document.getElementById('cust-phone').value = user.phone || '';
+      }
+
+      renderCheckoutSummary();
+    });
+
+    function renderCheckoutSummary() {
+      const items = Cart.getCart();
+      const totals = Cart.getTotals();
+
+      const itemsList = document.getElementById('checkout-items-list');
+      itemsList.innerHTML = items.map(item => `
+        <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.85rem;">
+          <img src="${item.image}" style="width:40px; height:40px; border-radius:4px; object-fit:cover;">
+          <div style="flex-grow:1;">
+            <div style="font-weight:700; color:var(--text-main);">${item.name}</div>
+            <div style="color:var(--text-muted);">Qty: ${item.qty} × ${Utils.formatINR(item.sellingPrice)}</div>
+          </div>
+          <div style="font-weight:700;">${Utils.formatINR(item.sellingPrice * item.qty)}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('chk-subtotal').textContent = Utils.formatINR(totals.subtotal);
+      document.getElementById('chk-shipping').textContent = totals.shipping === 0 ? 'FREE' : Utils.formatINR(totals.shipping);
+      document.getElementById('chk-tax').textContent = Utils.formatINR(totals.tax);
+      document.getElementById('chk-grand-total').textContent = Utils.formatINR(totals.grandTotal);
+    }
+
+    function togglePaymentDetails(type) {
+      document.getElementById('payment-details-upi').style.display = type === 'upi' ? 'block' : 'none';
+      document.getElementById('payment-details-card').style.display = type === 'card' ? 'block' : 'none';
+    }
+
+    function handlePlaceOrder(e) {
+      e.preventDefault();
+
+      const btn = document.getElementById('place-order-btn');
+      btn.disabled = true;
+      btn.textContent = '⏳ Authorizing Payment...';
+
+      const items = Cart.getCart();
+      const totals = Cart.getTotals();
+      const user = Auth.getCurrentUser();
+      const payMethod = document.querySelector('input[name="payment-method"]:checked').value;
+
+      // Build Order Object with line-item supplier profitability tracking for Admin & Supplier
+      const orderItems = items.map(item => {
+        const prod = ZenDB.getProductById(item.productId);
+        const buyPrice = prod ? prod.buyPrice : Math.round(item.sellingPrice * 0.5);
+        const shippingCost = prod ? prod.shippingCost : 50;
+        const platformFee = prod ? prod.platformFee : 30;
+        const tax = Math.round(item.sellingPrice * 0.18);
+        const profit = item.sellingPrice - buyPrice - shippingCost - platformFee - tax;
+
+        return {
+          productId: item.productId,
+          variantId: item.variantId,
+          name: item.name,
+          sku: item.sku,
+          image: item.image,
+          qty: item.qty,
+          mrp: item.mrp,
+          sellingPrice: item.sellingPrice,
+          buyPrice: buyPrice,
+          shippingCost: shippingCost,
+          platformFee: platformFee,
+          tax: tax,
+          profit: profit,
+          supplierId: item.supplierId
+        };
+      });
+
+      const totalBuyCost = orderItems.reduce((sum, i) => sum + (i.buyPrice * i.qty), 0);
+      const totalProfit = orderItems.reduce((sum, i) => sum + (i.profit * i.qty), 0);
+
+      const orderData = {
+        customerId: user ? user.id : 'CUST-' + Math.floor(1000 + Math.random() * 9000),
+        customerName: document.getElementById('cust-name').value,
+        customerEmail: document.getElementById('cust-email').value,
+        customerPhone: document.getElementById('cust-phone').value,
+        shippingAddress: {
+          house: document.getElementById('cust-house').value,
+          area: document.getElementById('cust-area').value,
+          city: document.getElementById('cust-city').value,
+          state: document.getElementById('cust-state').value,
+          pin: document.getElementById('cust-pin').value,
+          country: 'India'
+        },
+        items: orderItems,
+        subtotal: totals.subtotal,
+        discount: totals.discount,
+        shipping: totals.shipping,
+        tax: totals.tax,
+        total: totals.grandTotal,
+        totalBuyCost: totalBuyCost,
+        totalProfit: totalProfit,
+        paymentMethod: payMethod,
+        paymentStatus: payMethod === 'COD' ? 'Pending' : 'Paid',
+        orderStatus: 'Confirmed'
+      };
+
+      setTimeout(() => {
+        const newOrder = ZenDB.createOrder(orderData);
+        Cart.clear();
+        Utils.showToast(`Order #${newOrder.id} placed successfully!`, 'success');
+        
+        setTimeout(() => {
+          window.location.href = `/orders.html?id=${newOrder.id}`;
+        }, 1000);
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

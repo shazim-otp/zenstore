@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assigned Orders - Supplier Portal</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/supplier.css">
+</head>
+<body class="supplier-layout">
+
+  <!-- Sidebar -->
+  <aside class="supplier-sidebar">
+    <div style="padding:1.25rem 1.5rem; border-bottom:1px solid #334155; display:flex; align-items:center; gap:0.75rem;">
+      <div class="logo-icon" style="width:32px; height:32px; font-size:1.1rem; background:var(--secondary);">📦</div>
+      <div style="font-family:var(--font-heading); font-weight:800; font-size:1.2rem;">Supplier<span style="color:var(--secondary);">Portal</span></div>
+    </div>
+
+    <div style="padding:1rem 0.85rem; display:flex; flex-direction:column; gap:0.35rem; flex-grow:1;">
+      <a href="index.html" class="sidebar-link" style="color:#94A3B8;"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Overview</span></a>
+      <a href="orders.html" class="sidebar-link active" style="color:#FFF;"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg><span>Assigned Orders</span></a>
+      <a href="products.html" class="sidebar-link" style="color:#94A3B8;"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg><span>Supplied Products</span></a>
+      <a href="profile.html" class="sidebar-link" style="color:#94A3B8;"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><span>Earnings & Profile</span></a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="supplier-main">
+    <header style="background:var(--surface); border-bottom:1px solid var(--border); padding:1rem 2rem;">
+      <h1 style="font-size:1.5rem; font-weight:800;">Assigned Orders Dispatch List</h1>
+      <p style="color:var(--text-muted); font-size:0.85rem;">Strict Data Isolation: Displays exclusively items assigned to your warehouse</p>
+    </header>
+
+    <div style="padding:2rem;">
+      <div id="supplier-orders-list">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Core Scripts -->
+  <script src="../js/database.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let currentSupplierId = 'SUP-101';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Auth.requireRole(['supplier', 'admin'])) return;
+      const user = Auth.getCurrentUser();
+      if (user && user.supplierId) currentSupplierId = user.supplierId;
+
+      renderSupplierOrdersPage();
+    });
+
+    function renderSupplierOrdersPage() {
+      const orders = ZenDB.getOrdersBySupplier(currentSupplierId);
+      const container = document.getElementById('supplier-orders-list');
+
+      container.innerHTML = orders.map(o => {
+        const myItems = o.items.filter(i => i.supplierId === currentSupplierId);
+        const myPayout = myItems.reduce((sum, i) => sum + (i.buyPrice * i.qty), 0);
+        const supStateObj = o.supplierStatus && o.supplierStatus[currentSupplierId] ? o.supplierStatus[currentSupplierId] : { status: 'Pending', trackingNumber: '' };
+
+        return `
+          <div class="supplier-order-card">
+            <div class="supplier-order-header">
+              <div><span style="font-weight:800; color:var(--text-main);">Order #${o.id}</span> - ${Utils.formatDate(o.createdAt)}</div>
+              <div><span class="status-pill ${supStateObj.status.toLowerCase()}">${supStateObj.status}</span></div>
+            </div>
+            <div class="supplier-order-body">
+              <div>
+                <div class="supplier-items-list">
+                  ${myItems.map(i => `
+                    <div class="supplier-item-row">
+                      <img src="${i.image}" class="supplier-item-img">
+                      <div style="flex-grow:1;">
+                        <div style="font-weight:700;">${i.name}</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">SKU: ${i.sku} | Qty: ${i.qty}</div>
+                      </div>
+                      <div style="font-weight:800; color:var(--success);">${Utils.formatINR(i.buyPrice)}</div>
+                    </div>
+                  `).join('')}
+                </div>
+                <div style="margin-top:1rem; padding:0.75rem; background:var(--surface-alt); border-radius:4px; font-size:0.85rem;">
+                  <strong>Deliver To:</strong> ${o.customerName} - ${o.shippingAddress.house}, ${o.shippingAddress.area}, ${o.shippingAddress.city} - ${o.shippingAddress.pin}
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                <div class="supplier-payout-box"><span>Your Payout:</span><span>${Utils.formatINR(myPayout)}</span></div>
+                <input type="text" id="track-${o.id}" class="form-control" value="${supStateObj.trackingNumber || ''}" placeholder="Tracking #">
+                <button class="btn btn-success btn-sm" onclick="markShipped('${o.id}')">Update Tracking & Ship</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function markShipped(id) {
+      const trk = document.getElementById(`track-${id}`).value.trim() || 'TRK-' + Math.floor(100000 + Math.random() * 900000);
+      ZenDB.updateSupplierFulfillment(id, currentSupplierId, { status: 'Shipped', trackingNumber: trk });
+      renderSupplierOrdersPage();
+      Utils.showToast(`Order #${id} marked as Shipped!`, 'success');
+    }
+  </script>
+</body>
+</html>
