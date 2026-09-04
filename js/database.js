@@ -246,36 +246,52 @@ const ZenDB = {
         this._setLocalStorage(STORAGE_KEYS.SUPPLIERS, this._cache.suppliers);
       }
 
-      // 3. Products
+      // 3. Products - SMART MERGE TO PREVENT DISAPPEARING PRODUCTS
       const { data: prodData } = await client.from('products').select('*');
-      if (prodData && prodData.length) {
-        this._cache.products = prodData.map(p => ({
-          id: p.id,
-          supplierId: p.supplier_id,
-          categoryId: p.category_id,
-          name: p.name,
-          slug: p.slug,
-          description: p.description || '',
-          shortDescription: p.short_description || '',
-          sku: p.sku,
-          brand: p.brand || 'Zen Store',
-          mrp: Number(p.mrp),
-          sellingPrice: Number(p.selling_price),
-          buyPrice: Math.round(Number(p.selling_price) * 0.5),
-          shippingCost: 70,
-          platformFee: 40,
-          tax: Math.round(Number(p.selling_price) * 0.18),
-          profit: Math.round(Number(p.selling_price) * 0.3),
-          profitMargin: 30.0,
-          stock: p.stock,
-          lowStockThreshold: p.low_stock_threshold || 10,
-          status: p.status || 'Active',
-          rating: Number(p.rating) || 4.8,
-          reviewsCount: p.reviews_count || 0,
-          mainImage: p.main_image || '',
-          images: [p.main_image || '']
-        }));
-        this._setLocalStorage(STORAGE_KEYS.PRODUCTS, this._cache.products);
+      const supabaseProducts = (prodData || []).map(p => ({
+        id: p.id,
+        supplierId: p.supplier_id,
+        categoryId: p.category_id,
+        name: p.name,
+        slug: p.slug,
+        description: p.description || '',
+        shortDescription: p.short_description || '',
+        sku: p.sku,
+        brand: p.brand || 'Zen Store',
+        mrp: Number(p.mrp),
+        sellingPrice: Number(p.selling_price),
+        buyPrice: Math.round(Number(p.selling_price) * 0.5),
+        shippingCost: 70,
+        platformFee: 40,
+        tax: Math.round(Number(p.selling_price) * 0.18),
+        profit: Math.round(Number(p.selling_price) * 0.3),
+        profitMargin: 30.0,
+        stock: p.stock,
+        lowStockThreshold: p.low_stock_threshold || 10,
+        status: p.status || 'Active',
+        rating: Number(p.rating) || 4.8,
+        reviewsCount: p.reviews_count || 0,
+        mainImage: p.main_image || '',
+        images: [p.main_image || '']
+      }));
+
+      // Get current local products (stored in memory or LocalStorage)
+      const currentLocal = this._cache.products || this._getLocalStorage(STORAGE_KEYS.PRODUCTS) || [];
+
+      // Combine Supabase products with local products using Map so local products NEVER vanish
+      const mergedMap = new Map();
+      currentLocal.forEach(p => mergedMap.set(p.id, p));
+      supabaseProducts.forEach(p => mergedMap.set(p.id, { ...mergedMap.get(p.id), ...p }));
+
+      const mergedList = Array.from(mergedMap.values());
+      this._cache.products = mergedList;
+      this._setLocalStorage(STORAGE_KEYS.PRODUCTS, mergedList);
+
+      // Attempt to push any unsynced local products back to Supabase
+      for (const localP of currentLocal) {
+        if (!supabaseProducts.some(sp => sp.id === localP.id)) {
+          this._pushProductToSupabase(localP);
+        }
       }
 
       // 4. Orders & Order Items
@@ -337,7 +353,7 @@ const ZenDB = {
       'returned': 'Returned',
       'refunded': 'Refunded'
     };
-    return map[enumVal] || enumVal || 'Pending WhatsApp Confirmation';
+    return map[enumVal] || 'Pending WhatsApp Confirmation';
   },
 
   _mapOrderStatusToEnum(statusVal) {
@@ -359,7 +375,7 @@ const ZenDB = {
 
   // ================= PRODUCTS API =================
   getProducts() {
-    return this._cache.products || this._getLocalStorage(STORAGE_KEYS.PRODUCTS);
+    return this._cache.products || this._getLocalStorage(STORAGE_KEYS.PRODUCTS) || [];
   },
 
   getProductById(id) {
@@ -415,42 +431,46 @@ const ZenDB = {
     this._setLocalStorage(STORAGE_KEYS.PRODUCTS, products);
     this._cache.products = products;
 
-    // Realtime Supabase Database Sync
-    if (typeof SupabaseClientService !== 'undefined' && SupabaseClientService.isConfigured()) {
-      const client = SupabaseClientService.getClient();
-      if (client) {
-        try {
-          const { data, error } = await client.from('products').upsert({
-            id: prodId,
-            name: fullProduct.name,
-            slug: fullProduct.slug,
-            short_description: fullProduct.shortDescription,
-            description: fullProduct.description,
-            sku: fullProduct.sku,
-            brand: fullProduct.brand,
-            supplier_id: fullProduct.supplierId,
-            category_id: fullProduct.categoryId,
-            mrp: fullProduct.mrp,
-            selling_price: fullProduct.sellingPrice,
-            stock: fullProduct.stock,
-            low_stock_threshold: fullProduct.lowStockThreshold,
-            status: fullProduct.status,
-            main_image: fullProduct.mainImage,
-            updated_at: new Date().toISOString()
-          }, { onConflict: 'id' }).select();
+    // Realtime Supabase Push
+    await this._pushProductToSupabase(fullProduct);
 
-          if (error) {
-            console.error('⚠️ Supabase Product Sync Error:', error.message);
-          } else {
-            console.log('⚡ Product successfully published to Supabase:', prodId, data);
-          }
-        } catch (e) {
-          console.warn('Supabase product save exception:', e);
-        }
-      }
-    }
-
+    window.dispatchEvent(new CustomEvent('zenstore:db-synced'));
     return fullProduct;
+  },
+
+  async _pushProductToSupabase(fullProduct) {
+    if (typeof SupabaseClientService === 'undefined' || !SupabaseClientService.isConfigured()) return;
+    const client = SupabaseClientService.getClient();
+    if (!client) return;
+
+    try {
+      const { data, error } = await client.from('products').upsert({
+        id: fullProduct.id,
+        name: fullProduct.name,
+        slug: fullProduct.slug,
+        short_description: fullProduct.shortDescription,
+        description: fullProduct.description,
+        sku: fullProduct.sku,
+        brand: fullProduct.brand,
+        supplier_id: fullProduct.supplierId || null,
+        category_id: fullProduct.categoryId || null,
+        mrp: fullProduct.mrp,
+        selling_price: fullProduct.sellingPrice,
+        stock: fullProduct.stock,
+        low_stock_threshold: fullProduct.lowStockThreshold,
+        status: fullProduct.status,
+        main_image: fullProduct.mainImage,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'id' }).select();
+
+      if (error) {
+        console.error('⚠️ Supabase Product Sync Error:', error.message);
+      } else {
+        console.log('⚡ Product successfully synchronized with Supabase:', fullProduct.id);
+      }
+    } catch (e) {
+      console.warn('Supabase product push exception:', e);
+    }
   },
 
   async deleteProduct(id) {
