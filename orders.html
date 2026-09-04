@@ -54,6 +54,9 @@
   </nav>
 
   <!-- Core Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
   <script src="js/database.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
@@ -67,10 +70,14 @@
     function renderOrdersList() {
       const container = document.getElementById('orders-list-container');
       const user = Auth.getCurrentUser();
+      const urlParams = new URLSearchParams(window.location.search);
+      const highlightId = urlParams.get('id');
       
       let orders = ZenDB.getOrders();
       if (user && user.role === 'customer') {
         orders = ZenDB.getOrdersByCustomer(user.id);
+      } else if (highlightId) {
+        orders = orders.filter(o => o.id === highlightId);
       }
 
       if (!orders || orders.length === 0) {
@@ -85,57 +92,72 @@
         return;
       }
 
-      container.innerHTML = orders.map(o => `
-        <div class="card" style="margin-bottom:1.5rem; overflow:hidden;">
-          <div class="card-header" style="background:var(--surface-alt);">
-            <div>
-              <span style="font-weight:800; font-size:1.1rem; color:var(--text-main);">Order #${o.id}</span>
-              <span style="font-size:0.85rem; color:var(--text-muted); margin-left:0.75rem;">Placed on ${Utils.formatDate(o.createdAt)}</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:0.75rem;">
-              <span class="status-pill ${o.orderStatus.toLowerCase()}">${o.orderStatus}</span>
-              <span style="font-weight:800; font-size:1.1rem; color:var(--primary);">${Utils.formatINR(o.total)}</span>
-            </div>
-          </div>
+      container.innerHTML = orders.map(o => {
+        const isTarget = highlightId && o.id === highlightId;
+        const statusClass = getStatusBadgeClass(o.orderStatus);
+        const payStatusClass = o.paymentStatus === 'Paid' ? 'badge-success' : 'badge-warning';
 
-          <div class="card-body">
-
-            <!-- Visual Progress Timeline -->
-            <div style="margin-bottom:1.5rem; padding:1rem; background:var(--light-bg); border-radius:var(--radius-md); border:1px solid var(--border);">
-              <div style="font-weight:700; font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">DELIVERY TIMELINE</div>
-              <div style="display:flex; justify-content:space-between; position:relative;">
-                ${renderTimelineStep('Confirmed', o.orderStatus)}
-                ${renderTimelineStep('Processing', o.orderStatus)}
-                ${renderTimelineStep('Shipped', o.orderStatus)}
-                ${renderTimelineStep('Delivered', o.orderStatus)}
+        return `
+          <div class="card" style="margin-bottom:1.5rem; overflow:hidden; ${isTarget ? 'border:2px solid var(--primary); box-shadow:0 0 15px rgba(99,102,241,0.2);' : ''}">
+            <div class="card-header" style="background:var(--surface-alt); flex-wrap:wrap; gap:0.5rem;">
+              <div>
+                <span style="font-weight:800; font-size:1.1rem; color:var(--text-main);">Order #${o.id}</span>
+                <span style="font-size:0.85rem; color:var(--text-muted); margin-left:0.75rem;">Placed on ${Utils.formatDate(o.createdAt)}</span>
               </div>
-              ${o.trackingNumber ? `
-                <div style="margin-top:0.85rem; font-size:0.85rem; font-weight:700; color:var(--primary); background:var(--primary-light); padding:0.5rem 0.85rem; border-radius:var(--radius-sm); display:inline-block;">
-                  🚚 Carrier Tracking #: <strong>${o.trackingNumber}</strong>
-                </div>
-              ` : ''}
+              <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                <span class="badge ${payStatusClass}">Payment: ${o.paymentStatus || 'Unpaid'}</span>
+                <span class="badge ${statusClass}">${o.orderStatus}</span>
+                <span style="font-weight:800; font-size:1.1rem; color:var(--primary);">${Utils.formatINR(o.total)}</span>
+              </div>
             </div>
 
-            <!-- Items -->
-            <div style="display:flex; flex-direction:column; gap:0.75rem;">
-              ${o.items.map(i => `
-                <div style="display:flex; align-items:center; gap:1rem;">
-                  <img src="${i.image}" style="width:50px; height:50px; border-radius:var(--radius-sm); object-fit:cover; background:var(--surface-alt);">
-                  <div style="flex-grow:1;">
-                    <div style="font-weight:700; font-size:0.95rem;">${i.name}</div>
-                    <div style="font-size:0.8rem; color:var(--text-muted);">Qty: ${i.qty} × ${Utils.formatINR(i.sellingPrice)}</div>
+            <div class="card-body">
+
+              <!-- Visual Progress Timeline -->
+              <div style="margin-bottom:1.5rem; padding:1rem; background:var(--light-bg); border-radius:var(--radius-md); border:1px solid var(--border);">
+                <div style="font-weight:700; font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">DELIVERY TIMELINE</div>
+                <div style="display:flex; justify-content:space-between; position:relative;">
+                  ${renderTimelineStep('Pending WhatsApp Confirmation', o.orderStatus)}
+                  ${renderTimelineStep('Confirmed', o.orderStatus)}
+                  ${renderTimelineStep('Processing', o.orderStatus)}
+                  ${renderTimelineStep('Shipped', o.orderStatus)}
+                  ${renderTimelineStep('Delivered', o.orderStatus)}
+                </div>
+                ${o.trackingNumber ? `
+                  <div style="margin-top:0.85rem; font-size:0.85rem; font-weight:700; color:var(--primary); background:var(--primary-light); padding:0.5rem 0.85rem; border-radius:var(--radius-sm); display:inline-block;">
+                    🚚 Carrier Tracking #: <strong>${o.trackingNumber}</strong>
                   </div>
-                </div>
-              `).join('')}
-            </div>
+                ` : ''}
+              </div>
 
+              <!-- Items -->
+              <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                ${o.items.map(i => `
+                  <div style="display:flex; align-items:center; gap:1rem;">
+                    <img src="${i.image}" style="width:50px; height:50px; border-radius:var(--radius-sm); object-fit:cover; background:var(--surface-alt);">
+                    <div style="flex-grow:1;">
+                      <div style="font-weight:700; font-size:0.95rem;">${i.name}</div>
+                      <div style="font-size:0.8rem; color:var(--text-muted);">Qty: ${i.qty} × ${Utils.formatINR(i.sellingPrice)}</div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+
+            </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
+    }
+
+    function getStatusBadgeClass(status) {
+      if (status === 'Delivered') return 'badge-success';
+      if (status === 'Shipped' || status === 'Out for Delivery') return 'badge-primary';
+      if (status === 'Pending WhatsApp Confirmation') return 'badge-warning';
+      return 'badge-secondary';
     }
 
     function renderTimelineStep(stepName, currentStatus) {
-      const steps = ['Confirmed', 'Processing', 'Shipped', 'Delivered'];
+      const steps = ['Pending WhatsApp Confirmation', 'Confirmed', 'Processing', 'Shipped', 'Delivered'];
       const currentIdx = steps.indexOf(currentStatus);
       const stepIdx = steps.indexOf(stepName);
 
@@ -144,10 +166,10 @@
 
       return `
         <div style="display:flex; flex-direction:column; align-items:center; flex-grow:1; text-align:center;">
-          <div style="width:24px; height:24px; border-radius:50%; background:${isCompleted ? 'var(--success)' : 'var(--border)'}; color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:800; margin-bottom:0.35rem;">
+          <div style="width:22px; height:22px; border-radius:50%; background:${isCompleted ? 'var(--success)' : 'var(--border)'}; color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:800; margin-bottom:0.35rem;">
             ${isCompleted ? '✓' : stepIdx + 1}
           </div>
-          <div style="font-size:0.75rem; font-weight:700; color:${color};">${stepName}</div>
+          <div style="font-size:0.7rem; font-weight:700; color:${color};">${stepName === 'Pending WhatsApp Confirmation' ? 'WhatsApp' : stepName}</div>
         </div>
       `;
     }

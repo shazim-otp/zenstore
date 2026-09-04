@@ -52,6 +52,7 @@
   </main>
 
   <!-- Core Scripts -->
+  <script src="../js/config.js"></script>
   <script src="../js/database.js"></script>
   <script src="../js/utils.js"></script>
   <script src="../js/auth.js"></script>
@@ -59,7 +60,7 @@
     let currentSupplierId = 'SUP-101';
 
     document.addEventListener('DOMContentLoaded', () => {
-      if (!Auth.requireRole(['supplier', 'admin'])) return;
+      if (!Auth.requireRole(['supplier'])) return;
       const user = Auth.getCurrentUser();
       if (user && user.supplierId) currentSupplierId = user.supplierId;
 

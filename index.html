@@ -59,8 +59,6 @@
       <a href="shop.html?category=CAT-WEAR" class="subbar-link">Smart Wearables</a>
       <a href="shop.html?category=CAT-HOME" class="subbar-link">Home & Office</a>
       <a href="shop.html?category=CAT-PERC" class="subbar-link">Personal Care</a>
-      <a href="admin/index.html" class="subbar-link" style="color:var(--primary); font-weight:700;">👑 Admin Portal</a>
-      <a href="supplier/index.html" class="subbar-link" style="color:var(--secondary); font-weight:700;">📦 Supplier Portal</a>
     </div>
   </nav>
 
@@ -150,11 +148,11 @@
         </ul>
       </div>
       <div>
-        <h4 style="color:#FFF; font-size:1rem; margin-bottom:1rem;">Portals</h4>
+        <h4 style="color:#FFF; font-size:1rem; margin-bottom:1rem;">Partner & Merchant</h4>
         <ul style="display:flex; flex-direction:column; gap:0.6rem; font-size:0.9rem;">
-          <li><a href="admin/index.html" style="color:var(--primary-light);">👑 Admin Dashboard</a></li>
-          <li><a href="supplier/index.html" style="color:var(--secondary-light);">📦 Supplier Portal</a></li>
-          <li><a href="admin/add-product.html" style="color:#94A3B8;">Add New Product</a></li>
+          <li><a href="login.html" style="color:#94A3B8;">Supplier Portal</a></li>
+          <li><a href="login.html" style="color:#94A3B8;">Merchant Account</a></li>
+          <li><a href="shop.html" style="color:#94A3B8;">Partner Program</a></li>
         </ul>
       </div>
       <div>
@@ -165,7 +163,7 @@
       </div>
     </div>
     <div style="max-width:1280px; margin:0 auto; padding-top:1.5rem; border-top:1px solid var(--dark-border); text-align:center; font-size:0.85rem;">
-      © 2026 Zen Store India. Production-Quality Vanilla E-Commerce Prototype.
+      © 2026 Zen Store India. All rights reserved.
     </div>
   </footer>
 
@@ -194,6 +192,9 @@
   </nav>
 
   <!-- Core Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
   <script src="js/database.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
