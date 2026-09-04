@@ -144,6 +144,16 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--primary);
 }
 
+.sidebar-link svg {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+  flex-shrink: 0 !important;
+}
+
 a {
   color: var(--primary);
   text-decoration: none;
