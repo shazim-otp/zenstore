@@ -67,12 +67,13 @@
   </main>
 
   <!-- Core Scripts -->
+  <script src="../js/config.js"></script>
   <script src="../js/database.js"></script>
   <script src="../js/utils.js"></script>
   <script src="../js/auth.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      if (!Auth.requireRole(['admin'])) return;
+      if (!Auth.requireRole(['admin', 'owner'])) return;
 
       renderCustomers();
     });

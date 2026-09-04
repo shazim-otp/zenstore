@@ -1,6 +1,5 @@
 /* ==========================================================================
-   Zen Store - Central Database Service & Automatic Seed Generator
-   Data Storage Engine using LocalStorage
+   Zen Store - Central Database Service & Supabase Synchronization
    ========================================================================== */
 
 const STORAGE_KEYS = {
@@ -15,7 +14,7 @@ const STORAGE_KEYS = {
   SESSION: 'zenstore_session'
 };
 
-// Initial Seed Data Generator
+// Initial Seed Data Generator (Fallback when Supabase URL is unconfigured)
 const INITIAL_SEED_DATA = {
   suppliers: [
     {
@@ -64,14 +63,11 @@ const INITIAL_SEED_DATA = {
   ],
 
   users: [
-    { id: 'USR-ADMIN', name: 'Zen Admin', email: 'admin@zenstore.com', password: 'admin123', role: 'admin', phone: '+91 99000 00000' },
+    { id: 'USR-ADMIN', name: 'Zen Admin', username: 'zeni', email: 'zeni@zenstore.com', password: 'zenn', role: 'admin', phone: '+91 99000 00000' },
     { id: 'USR-SUP1', name: 'Rajesh Kumar', email: 'supplier1@techcraft.in', password: 'supplier123', role: 'supplier', supplierId: 'SUP-101', phone: '+91 98765 11001' },
     { id: 'USR-SUP2', name: 'Amitabh Shah', email: 'supplier2@nextgen.in', password: 'supplier123', role: 'supplier', supplierId: 'SUP-102', phone: '+91 98200 44321' },
     { id: 'USR-SUP3', name: 'Suresh Verma', email: 'supplier3@apexglobal.in', password: 'supplier123', role: 'supplier', supplierId: 'SUP-103', phone: '+91 99100 88776' },
-    { id: 'CUST-101', name: 'Rahul Sharma', email: 'rahul.sharma@gmail.com', password: 'user123', role: 'customer', phone: '+91 98765 43210', address: 'Flat 402, Sunshine Heights, Koramangala 4th Block, Bengaluru, Karnataka - 560034' },
-    { id: 'CUST-102', name: 'Priya Patel', email: 'priya.patel@yahoo.com', password: 'user123', role: 'customer', phone: '+91 98211 99887', address: 'B-14 Gokul Dham, SG Highway, Ahmedabad, Gujarat - 380054' },
-    { id: 'CUST-103', name: 'Ananya Sen', email: 'ananya.sen@outlook.com', password: 'user123', role: 'customer', phone: '+91 97112 33445', address: '12 Park Street, Flat 3B, Kolkata, West Bengal - 700016' },
-    { id: 'CUST-104', name: 'Vikram Malhotra', email: 'vikram.m@gmail.com', password: 'user123', role: 'customer', phone: '+91 99887 66554', address: '78 Model Town Phase 2, New Delhi - 110009' }
+    { id: 'CUST-101', name: 'Rahul Sharma', email: 'rahul.sharma@gmail.com', password: 'user123', role: 'customer', phone: '+91 98765 43210', address: 'Flat 402, Sunshine Heights, Koramangala 4th Block, Bengaluru, Karnataka - 560034' }
   ],
 
   products: [
@@ -80,11 +76,10 @@ const INITIAL_SEED_DATA = {
       name: 'ZenPods Pro Wireless ANC Earbuds',
       slug: 'zenpods-pro-wireless-anc-earbuds',
       shortDescription: 'Active Noise Cancellation with 36H Battery & Spatial Audio',
-      description: 'Experience pure acoustic clarity with ZenPods Pro. Features 45dB hybrid active noise cancellation, custom 11mm titanium drivers, environmental noise cancellation for crisp phone calls, and wireless fast charging.',
+      description: 'Experience pure acoustic clarity with ZenPods Pro.',
       sku: 'ZP-ANC-01',
       categoryId: 'CAT-ELEC',
       brand: 'Zen',
-      tags: ['audio', 'wireless', 'anc', 'bluetooth'],
       supplierId: 'SUP-101',
       status: 'Active',
       mrp: 3999,
@@ -97,16 +92,8 @@ const INITIAL_SEED_DATA = {
       profitMargin: 44.38,
       stock: 65,
       lowStockThreshold: 10,
-      images: [
-        'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80',
-        'https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=800&q=80',
-        'https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?w=800&q=80'
-      ],
+      images: ['https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80'],
       mainImage: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80',
-      variants: [
-        { id: 'V1', name: 'Matte Black', sku: 'ZP-BLK', sellingPrice: 2499, buyPrice: 1100, stock: 35 },
-        { id: 'V2', name: 'Glacier White', sku: 'ZP-WHT', sellingPrice: 2499, buyPrice: 1100, stock: 30 }
-      ],
       rating: 4.8,
       reviewsCount: 142,
       createdAt: '2026-08-01T10:00:00Z'
@@ -116,11 +103,10 @@ const INITIAL_SEED_DATA = {
       name: 'ZenFit Smartwatch Ultra AMOLED',
       slug: 'zenfit-smartwatch-ultra-amoled',
       shortDescription: '1.96" HD AMOLED Display, BT Calling, 100+ Sports Modes',
-      description: 'The ultimate smartwatch engineered for fitness enthusiasts and professionals. Crafted with a premium zinc-alloy frame, Bluetooth calling, heart rate & SpO2 monitoring, multi-day battery life, and IP68 waterproof rating.',
+      description: 'The ultimate smartwatch engineered for fitness enthusiasts and professionals.',
       sku: 'ZF-ULT-02',
       categoryId: 'CAT-WEAR',
       brand: 'ZenFit',
-      tags: ['smartwatch', 'fitness', 'wearable', 'amoled'],
       supplierId: 'SUP-102',
       status: 'Active',
       mrp: 5999,
@@ -133,15 +119,8 @@ const INITIAL_SEED_DATA = {
       profitMargin: 41.19,
       stock: 42,
       lowStockThreshold: 8,
-      images: [
-        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
-        'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=800&q=80'
-      ],
+      images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80'],
       mainImage: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
-      variants: [
-        { id: 'V1', name: 'Starlight Silver', sku: 'ZF-SLV', sellingPrice: 3299, buyPrice: 1550, stock: 22 },
-        { id: 'V2', name: 'Midnight Black', sku: 'ZF-BLK', sellingPrice: 3299, buyPrice: 1550, stock: 20 }
-      ],
       rating: 4.7,
       reviewsCount: 98,
       createdAt: '2026-08-05T12:00:00Z'
@@ -151,11 +130,10 @@ const INITIAL_SEED_DATA = {
       name: 'Aura Ambient RGB Desk Lamp',
       slug: 'aura-ambient-rgb-desk-lamp',
       shortDescription: 'Smart App Control, 16 Million RGB Colors, Wireless Charging Pad',
-      description: 'Transform your work setup with Aura. Combines a sleek minimalist architectural desk lamp, 10W Qi wireless smartphone charging base, sound-reactive RGB music modes, and stepless dimming.',
+      description: 'Transform your work setup with Aura.',
       sku: 'AU-RGB-03',
       categoryId: 'CAT-HOME',
       brand: 'Aura',
-      tags: ['lighting', 'rgb', 'desk', 'smart home'],
       supplierId: 'SUP-103',
       status: 'Active',
       mrp: 2999,
@@ -168,426 +146,219 @@ const INITIAL_SEED_DATA = {
       profitMargin: 42.07,
       stock: 30,
       lowStockThreshold: 5,
-      images: [
-        'https://images.unsplash.com/photo-1507499739999-097706ad8914?w=800&q=80'
-      ],
+      images: ['https://images.unsplash.com/photo-1507499739999-097706ad8914?w=800&q=80'],
       mainImage: 'https://images.unsplash.com/photo-1507499739999-097706ad8914?w=800&q=80',
-      variants: [],
       rating: 4.6,
       reviewsCount: 76,
       createdAt: '2026-08-10T14:30:00Z'
-    },
-    {
-      id: 'PROD-104',
-      name: 'HyperCharge 65W GaN Fast Charger',
-      slug: 'hypercharge-65w-gan-fast-charger',
-      shortDescription: 'Dual Type-C + USB-A Triple Port Power Adapter for Laptops & Mobiles',
-      description: 'Power all your devices simultaneously with cutting-edge Gallium Nitride (GaN) technology. 65W High-speed PD output charges MacBook, iPhone, and Android flagships from 0 to 60% in just 30 mins.',
-      sku: 'HC-GAN-65',
-      categoryId: 'CAT-ELEC',
-      brand: 'HyperCharge',
-      tags: ['charger', 'gan', 'fast charge', 'power'],
-      supplierId: 'SUP-101',
-      status: 'Active',
-      mrp: 2499,
-      sellingPrice: 1499,
-      buyPrice: 650,
-      shippingCost: 50,
-      platformFee: 25,
-      tax: 110,
-      profit: 664,
-      profitMargin: 44.30,
-      stock: 90,
-      lowStockThreshold: 15,
-      images: [
-        'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=800&q=80'
-      ],
-      mainImage: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=800&q=80',
-      variants: [],
-      rating: 4.9,
-      reviewsCount: 210,
-      createdAt: '2026-08-12T09:15:00Z'
-    },
-    {
-      id: 'PROD-105',
-      name: 'ZenBlend Portable Wireless Blender',
-      slug: 'zenblend-portable-wireless-blender',
-      shortDescription: 'USB-C Rechargeable Smoothies & Shake Maker with 6 Stainless Steel Blades',
-      description: 'Blend smoothies, protein shakes, and fresh juices anywhere on the go. Equipped with a powerful 7.4V motor, 1200mAh battery (up to 15 blends per charge), and BPA-free food-grade bottle.',
-      sku: 'ZB-PORT-05',
-      categoryId: 'CAT-PERC',
-      brand: 'ZenBlend',
-      tags: ['blender', 'kitchen', 'fitness', 'portable'],
-      supplierId: 'SUP-103',
-      status: 'Active',
-      mrp: 2199,
-      sellingPrice: 1399,
-      buyPrice: 580,
-      shippingCost: 60,
-      platformFee: 25,
-      tax: 100,
-      profit: 634,
-      profitMargin: 45.32,
-      stock: 50,
-      lowStockThreshold: 10,
-      images: [
-        'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&q=80'
-      ],
-      mainImage: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&q=80',
-      variants: [],
-      rating: 4.5,
-      reviewsCount: 64,
-      createdAt: '2026-08-15T11:00:00Z'
-    },
-    {
-      id: 'PROD-106',
-      name: 'Ergonomic Breathable Mesh Chair Pro',
-      slug: 'ergonomic-breathable-mesh-chair-pro',
-      shortDescription: '3D Lumbar Support, Adjustable Headrest, 135° Recline',
-      description: 'Engineered for all-day comfort. Features high-density memory foam seat cushion, Korean breathable mesh backrest, 3D adjustable armrests, and heavy-duty class 4 gas lift mechanism.',
-      sku: 'CH-ERGO-06',
-      categoryId: 'CAT-HOME',
-      brand: 'ZenWork',
-      tags: ['chair', 'furniture', 'ergonomic', 'office'],
-      supplierId: 'SUP-102',
-      status: 'Active',
-      mrp: 14999,
-      sellingPrice: 8999,
-      buyPrice: 4200,
-      shippingCost: 450,
-      platformFee: 150,
-      tax: 680,
-      profit: 3519,
-      profitMargin: 39.10,
-      stock: 18,
-      lowStockThreshold: 4,
-      images: [
-        'https://images.unsplash.com/photo-1580481072645-022f9a6d83d0?w=800&q=80'
-      ],
-      mainImage: 'https://images.unsplash.com/photo-1580481072645-022f9a6d83d0?w=800&q=80',
-      variants: [],
-      rating: 4.8,
-      reviewsCount: 52,
-      createdAt: '2026-08-16T16:20:00Z'
-    },
-    {
-      id: 'PROD-107',
-      name: 'ZenSound 120W Dolby Soundbar',
-      slug: 'zensound-120w-dolby-soundbar',
-      shortDescription: 'Wireless Subwoofer, HDMI ARC, Optical & Bluetooth 5.3',
-      description: 'Bring cinematic theater sound to your living room. 2.1 Channel soundbar with dedicated wireless deep bass subwoofer, customizable EQ modes (Movie, Music, News), and sleek metallic mesh finish.',
-      sku: 'ZS-BAR-120',
-      categoryId: 'CAT-ELEC',
-      brand: 'Zen',
-      tags: ['audio', 'soundbar', 'home theater', 'speaker'],
-      supplierId: 'SUP-101',
-      status: 'Active',
-      mrp: 9999,
-      sellingPrice: 5999,
-      buyPrice: 2800,
-      shippingCost: 200,
-      platformFee: 90,
-      tax: 450,
-      profit: 2459,
-      profitMargin: 40.99,
-      stock: 25,
-      lowStockThreshold: 5,
-      images: [
-        'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=800&q=80'
-      ],
-      mainImage: 'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=800&q=80',
-      variants: [],
-      rating: 4.7,
-      reviewsCount: 88,
-      createdAt: '2026-08-18T10:00:00Z'
-    },
-    {
-      id: 'PROD-108',
-      name: 'AeroCool Ergonomic Laptop Stand',
-      slug: 'aerocool-ergonomic-laptop-stand',
-      shortDescription: '100% Aluminum Alloy Construction with Dual Cooling Fans',
-      description: 'Keep your laptop cool and at ergonomic eye level. Supports all laptops up to 17.3 inches, features 6 adjustable height angles, non-slip silicone pads, and silent USB cooling fans.',
-      sku: 'AC-LST-08',
-      categoryId: 'CAT-HOME',
-      brand: 'AeroCool',
-      tags: ['laptop', 'stand', 'accessory', 'office'],
-      supplierId: 'SUP-103',
-      status: 'Active',
-      mrp: 1999,
-      sellingPrice: 1199,
-      buyPrice: 490,
-      shippingCost: 60,
-      platformFee: 20,
-      tax: 90,
-      profit: 539,
-      profitMargin: 44.95,
-      stock: 80,
-      lowStockThreshold: 12,
-      images: [
-        'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800&q=80'
-      ],
-      mainImage: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800&q=80',
-      variants: [],
-      rating: 4.6,
-      reviewsCount: 115,
-      createdAt: '2026-08-20T14:00:00Z'
-    },
-    {
-      id: 'PROD-109',
-      name: 'ZenKey RGB Wireless Mechanical Keyboard',
-      slug: 'zenkey-rgb-wireless-mechanical-keyboard',
-      shortDescription: 'Hot-Swappable Gateron Switches, Tri-Mode Connection (BT/2.4G/Type-C)',
-      description: 'Crafted for gamers and typists. 75% compact layout, PBT double-shot keycaps, per-key RGB backlighting with 19 effects, and massive 4000mAh battery.',
-      sku: 'ZK-KB-75',
-      categoryId: 'CAT-ELEC',
-      brand: 'ZenKey',
-      tags: ['keyboard', 'gaming', 'rgb', 'mechanical'],
-      supplierId: 'SUP-101',
-      status: 'Active',
-      mrp: 6999,
-      sellingPrice: 4299,
-      buyPrice: 2000,
-      shippingCost: 100,
-      platformFee: 65,
-      tax: 320,
-      profit: 1814,
-      profitMargin: 42.19,
-      stock: 35,
-      lowStockThreshold: 6,
-      images: [
-        'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=80'
-      ],
-      mainImage: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=80',
-      variants: [
-        { id: 'V1', name: 'Red Linear Switches', sku: 'ZK-RED', sellingPrice: 4299, buyPrice: 2000, stock: 20 },
-        { id: 'V2', name: 'Brown Tactile Switches', sku: 'ZK-BRN', sellingPrice: 4299, buyPrice: 2000, stock: 15 }
-      ],
-      rating: 4.9,
-      reviewsCount: 160,
-      createdAt: '2026-08-22T08:30:00Z'
-    },
-    {
-      id: 'PROD-110',
-      name: 'PureBreathe Smart HEPA Air Purifier',
-      slug: 'purebreathe-smart-hepa-air-purifier',
-      shortDescription: 'H13 True HEPA Filter, Real-time AQI Monitor, Silent Sleep Mode',
-      description: 'Eliminates 99.97% of airborne pollutants, dust, pollen, and odor. Filters air in rooms up to 400 sq.ft, features digital PM2.5 air quality readout, and smart phone app integration.',
-      sku: 'PB-AIR-10',
-      categoryId: 'CAT-HOME',
-      brand: 'PureBreathe',
-      tags: ['home', 'air purifier', 'smart home', 'health'],
-      supplierId: 'SUP-102',
-      status: 'Active',
-      mrp: 8999,
-      sellingPrice: 5499,
-      buyPrice: 2600,
-      shippingCost: 180,
-      platformFee: 80,
-      tax: 410,
-      profit: 2229,
-      profitMargin: 40.53,
-      stock: 22,
-      lowStockThreshold: 5,
-      images: [
-        'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80'
-      ],
-      mainImage: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80',
-      variants: [],
-      rating: 4.8,
-      reviewsCount: 79,
-      createdAt: '2026-08-23T15:45:00Z'
     }
   ],
 
-  orders: [
-    {
-      id: 'ORD-94801',
-      customerId: 'CUST-101',
-      customerName: 'Rahul Sharma',
-      customerEmail: 'rahul.sharma@gmail.com',
-      customerPhone: '+91 98765 43210',
-      shippingAddress: {
-        house: 'Flat 402, Sunshine Heights',
-        area: 'Koramangala 4th Block',
-        city: 'Bengaluru',
-        state: 'Karnataka',
-        pin: '560034',
-        country: 'India'
-      },
-      items: [
-        {
-          productId: 'PROD-101',
-          variantId: 'V1',
-          name: 'ZenPods Pro Wireless ANC Earbuds (Matte Black)',
-          sku: 'ZP-BLK',
-          image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80',
-          qty: 1,
-          mrp: 3999,
-          sellingPrice: 2499,
-          buyPrice: 1100,
-          shippingCost: 70,
-          platformFee: 40,
-          tax: 180,
-          profit: 1109,
-          supplierId: 'SUP-101'
-        }
-      ],
-      subtotal: 2499,
-      discount: 1500,
-      shipping: 0,
-      tax: 180,
-      total: 2679,
-      totalBuyCost: 1100,
-      totalProfit: 1109,
-      paymentMethod: 'UPI',
-      paymentStatus: 'Paid',
-      orderStatus: 'Delivered',
-      supplierStatus: {
-        'SUP-101': { status: 'Delivered', trackingNumber: 'BD-884920', shippedAt: '2026-08-25T10:00:00Z', deliveredAt: '2026-08-27T16:30:00Z' }
-      },
-      trackingNumber: 'BD-884920',
-      createdAt: '2026-08-24T14:30:00Z',
-      updatedAt: '2026-08-27T16:30:00Z'
-    },
-    {
-      id: 'ORD-94802',
-      customerId: 'CUST-102',
-      customerName: 'Priya Patel',
-      customerEmail: 'priya.patel@yahoo.com',
-      customerPhone: '+91 98211 99887',
-      shippingAddress: {
-        house: 'B-14 Gokul Dham',
-        area: 'SG Highway',
-        city: 'Ahmedabad',
-        state: 'Gujarat',
-        pin: '380054',
-        country: 'India'
-      },
-      items: [
-        {
-          productId: 'PROD-102',
-          variantId: 'V1',
-          name: 'ZenFit Smartwatch Ultra AMOLED (Starlight Silver)',
-          sku: 'ZF-SLV',
-          image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
-          qty: 1,
-          mrp: 5999,
-          sellingPrice: 3299,
-          buyPrice: 1550,
-          shippingCost: 90,
-          platformFee: 50,
-          tax: 250,
-          profit: 1359,
-          supplierId: 'SUP-102'
-        }
-      ],
-      subtotal: 3299,
-      discount: 2700,
-      shipping: 0,
-      tax: 250,
-      total: 3549,
-      totalBuyCost: 1550,
-      totalProfit: 1359,
-      paymentMethod: 'Card',
-      paymentStatus: 'Paid',
-      orderStatus: 'Shipped',
-      supplierStatus: {
-        'SUP-102': { status: 'Shipped', trackingNumber: 'DTDC-774192', shippedAt: '2026-08-28T09:00:00Z', deliveredAt: null }
-      },
-      trackingNumber: 'DTDC-774192',
-      createdAt: '2026-08-27T11:15:00Z',
-      updatedAt: '2026-08-28T09:00:00Z'
-    },
-    {
-      id: 'ORD-94803',
-      customerId: 'CUST-103',
-      customerName: 'Ananya Sen',
-      customerEmail: 'ananya.sen@outlook.com',
-      customerPhone: '+91 97112 33445',
-      shippingAddress: {
-        house: '12 Park Street, Flat 3B',
-        area: 'Park Street',
-        city: 'Kolkata',
-        state: 'West Bengal',
-        pin: '700016',
-        country: 'India'
-      },
-      items: [
-        {
-          productId: 'PROD-103',
-          variantId: null,
-          name: 'Aura Ambient RGB Desk Lamp',
-          sku: 'AU-RGB-03',
-          image: 'https://images.unsplash.com/photo-1507499739999-097706ad8914?w=800&q=80',
-          qty: 1,
-          mrp: 2999,
-          sellingPrice: 1899,
-          buyPrice: 850,
-          shippingCost: 80,
-          platformFee: 30,
-          tax: 140,
-          profit: 799,
-          supplierId: 'SUP-103'
-        }
-      ],
-      subtotal: 1899,
-      discount: 1100,
-      shipping: 0,
-      tax: 140,
-      total: 2039,
-      totalBuyCost: 850,
-      totalProfit: 799,
-      paymentMethod: 'COD',
-      paymentStatus: 'Pending',
-      orderStatus: 'Processing',
-      supplierStatus: {
-        'SUP-103': { status: 'Accepted', trackingNumber: '', shippedAt: null, deliveredAt: null }
-      },
-      trackingNumber: '',
-      createdAt: '2026-08-28T18:00:00Z',
-      updatedAt: '2026-08-29T08:00:00Z'
-    }
-  ]
+  orders: []
 };
 
 // Database Service API
 const ZenDB = {
-  // Storage Initialization
+  // Synchronous cache for reactive frontend rendering
+  _cache: {
+    products: null,
+    categories: null,
+    suppliers: null,
+    orders: null,
+    users: null
+  },
+
+  // Storage & Cache Initialization
   init() {
     if (!localStorage.getItem(STORAGE_KEYS.PRODUCTS)) {
-      console.log('⚡ Initializing Zen Store local database seed data...');
       localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(INITIAL_SEED_DATA.products));
       localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(INITIAL_SEED_DATA.orders));
       localStorage.setItem(STORAGE_KEYS.SUPPLIERS, JSON.stringify(INITIAL_SEED_DATA.suppliers));
       localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(INITIAL_SEED_DATA.categories));
       localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(INITIAL_SEED_DATA.users));
     }
+    this.refreshCacheFromStorage();
+
+    if (typeof SupabaseClientService !== 'undefined' && SupabaseClientService.isConfigured()) {
+      this.syncFromSupabase();
+    }
   },
 
-  // Helper getters & setters
-  _get(key) {
+  refreshCacheFromStorage() {
+    this._cache.products = this._getLocalStorage(STORAGE_KEYS.PRODUCTS);
+    this._cache.orders = this._getLocalStorage(STORAGE_KEYS.ORDERS);
+    this._cache.suppliers = this._getLocalStorage(STORAGE_KEYS.SUPPLIERS);
+    this._cache.categories = this._getLocalStorage(STORAGE_KEYS.CATEGORIES);
+    this._cache.users = this._getLocalStorage(STORAGE_KEYS.USERS);
+  },
+
+  _getLocalStorage(key) {
     try {
       const data = localStorage.getItem(key);
       return data ? JSON.parse(data) : [];
     } catch (e) {
-      console.error('Storage Read Error:', e);
       return [];
     }
   },
 
-  _set(key, data) {
+  _setLocalStorage(key, data) {
     try {
       localStorage.setItem(key, JSON.stringify(data));
       return true;
     } catch (e) {
-      console.error('Storage Write Error:', e);
       return false;
     }
   },
 
+  // Supabase Async Fetcher & Cache Sync
+  async syncFromSupabase() {
+    const client = SupabaseClientService.getClient();
+    if (!client) return;
+
+    try {
+      // 1. Categories
+      const { data: catData } = await client.from('categories').select('*');
+      if (catData && catData.length) {
+        this._cache.categories = catData.map(c => ({
+          id: c.id,
+          name: c.name,
+          slug: c.slug,
+          description: c.description || '',
+          image: c.image_url || ''
+        }));
+        this._setLocalStorage(STORAGE_KEYS.CATEGORIES, this._cache.categories);
+      }
+
+      // 2. Suppliers
+      const { data: supData } = await client.from('suppliers').select('*');
+      if (supData && supData.length) {
+        this._cache.suppliers = supData.map(s => ({
+          id: s.id,
+          name: s.company_name,
+          companyName: s.company_name,
+          email: s.email,
+          phone: s.phone || '',
+          address: s.address || '',
+          status: s.status || 'Active',
+          paymentTerms: s.payment_terms || 'Net 15',
+          totalPayout: Number(s.total_payout) || 0
+        }));
+        this._setLocalStorage(STORAGE_KEYS.SUPPLIERS, this._cache.suppliers);
+      }
+
+      // 3. Products
+      const { data: prodData } = await client.from('products').select('*');
+      if (prodData && prodData.length) {
+        this._cache.products = prodData.map(p => ({
+          id: p.id,
+          supplierId: p.supplier_id,
+          categoryId: p.category_id,
+          name: p.name,
+          slug: p.slug,
+          description: p.description || '',
+          shortDescription: p.short_description || '',
+          sku: p.sku,
+          brand: p.brand || 'Zen Store',
+          mrp: Number(p.mrp),
+          sellingPrice: Number(p.selling_price),
+          buyPrice: Math.round(Number(p.selling_price) * 0.5),
+          shippingCost: 70,
+          platformFee: 40,
+          tax: Math.round(Number(p.selling_price) * 0.18),
+          profit: Math.round(Number(p.selling_price) * 0.3),
+          profitMargin: 30.0,
+          stock: p.stock,
+          lowStockThreshold: p.low_stock_threshold || 10,
+          status: p.status || 'Active',
+          rating: Number(p.rating) || 4.8,
+          reviewsCount: p.reviews_count || 0,
+          mainImage: p.main_image || '',
+          images: [p.main_image || '']
+        }));
+        this._setLocalStorage(STORAGE_KEYS.PRODUCTS, this._cache.products);
+      }
+
+      // 4. Orders & Order Items
+      const { data: ordData } = await client.from('orders').select('*, order_items(*)');
+      if (ordData) {
+        this._cache.orders = ordData.map(o => ({
+          id: o.id,
+          customerId: o.customer_id,
+          customerName: o.customer_name,
+          customerEmail: o.customer_email,
+          customerPhone: o.customer_phone,
+          supplierId: o.supplier_id,
+          shippingAddress: o.shipping_address,
+          subtotal: Number(o.subtotal),
+          shipping: Number(o.shipping_cost),
+          tax: Number(o.tax),
+          total: Number(o.total),
+          totalBuyCost: Number(o.buy_cost),
+          totalProfit: Number(o.profit),
+          paymentMethod: o.payment_method,
+          paymentStatus: o.payment_status === 'unpaid' ? 'Unpaid' : o.payment_status === 'paid' ? 'Paid' : 'COD',
+          orderStatus: this._mapEnumToOrderStatus(o.order_status),
+          trackingNumber: o.tracking_number || '',
+          createdAt: o.created_at,
+          items: (o.order_items || []).map(i => ({
+            productId: i.product_id,
+            supplierId: i.supplier_id,
+            name: i.product_name,
+            sku: i.sku,
+            variantId: i.variant_id,
+            variantName: i.variant_name,
+            qty: i.quantity,
+            mrp: Number(i.mrp),
+            sellingPrice: Number(i.selling_price),
+            buyPrice: Number(i.buy_price),
+            image: i.image_url
+          }))
+        }));
+        this._setLocalStorage(STORAGE_KEYS.ORDERS, this._cache.orders);
+      }
+
+    } catch (e) {
+      console.warn('Supabase sync warning:', e);
+    }
+  },
+
+  _mapEnumToOrderStatus(enumVal) {
+    const map = {
+      'pending_whatsapp_confirmation': 'Pending WhatsApp Confirmation',
+      'confirmed': 'Confirmed',
+      'processing': 'Processing',
+      'assigned_to_supplier': 'Assigned to Supplier',
+      'accepted': 'Accepted',
+      'shipped': 'Shipped',
+      'out_for_delivery': 'Out for Delivery',
+      'delivered': 'Delivered',
+      'cancelled': 'Cancelled',
+      'returned': 'Returned',
+      'refunded': 'Refunded'
+    };
+    return map[enumVal] || enumVal || 'Pending WhatsApp Confirmation';
+  },
+
+  _mapOrderStatusToEnum(statusVal) {
+    const map = {
+      'Pending WhatsApp Confirmation': 'pending_whatsapp_confirmation',
+      'Confirmed': 'confirmed',
+      'Processing': 'processing',
+      'Assigned to Supplier': 'assigned_to_supplier',
+      'Accepted': 'accepted',
+      'Shipped': 'shipped',
+      'Out for Delivery': 'out_for_delivery',
+      'Delivered': 'delivered',
+      'Cancelled': 'cancelled',
+      'Returned': 'returned',
+      'Refunded': 'refunded'
+    };
+    return map[statusVal] || 'pending_whatsapp_confirmation';
+  },
+
   // ================= PRODUCTS API =================
   getProducts() {
-    return this._get(STORAGE_KEYS.PRODUCTS);
+    return this._cache.products || this._getLocalStorage(STORAGE_KEYS.PRODUCTS);
   },
 
   getProductById(id) {
@@ -600,38 +371,113 @@ const ZenDB = {
     return products.find(p => p.slug === slug || p.id === slug) || null;
   },
 
-  saveProduct(productData) {
+  async saveProduct(productData) {
     const products = this.getProducts();
     const existingIndex = products.findIndex(p => p.id === productData.id);
+    const prodId = productData.id || 'PROD-' + Math.floor(1000 + Math.random() * 9000);
+
+    const fullProduct = {
+      id: prodId,
+      name: productData.name,
+      slug: productData.slug || (productData.name ? productData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'product-' + Date.now()),
+      shortDescription: productData.shortDescription || '',
+      description: productData.description || '',
+      sku: productData.sku || ('SKU-' + Date.now()),
+      brand: productData.brand || 'Zen Store',
+      supplierId: productData.supplierId || 'SUP-101',
+      categoryId: productData.categoryId || 'CAT-ELEC',
+      mrp: Number(productData.mrp) || 0,
+      sellingPrice: Number(productData.sellingPrice) || 0,
+      buyPrice: Number(productData.buyPrice) || 0,
+      shippingCost: Number(productData.shippingCost) || 0,
+      platformFee: Number(productData.platformFee) || 0,
+      tax: Number(productData.tax) || 0,
+      profit: Number(productData.profit) || 0,
+      profitMargin: Number(productData.profitMargin) || 0,
+      stock: Number(productData.stock) || 0,
+      lowStockThreshold: Number(productData.lowStockThreshold) || 10,
+      status: productData.status || 'Active',
+      rating: Number(productData.rating) || 4.8,
+      reviewsCount: productData.reviewsCount || 0,
+      mainImage: productData.mainImage || (productData.images && productData.images[0]) || '',
+      images: productData.images || [productData.mainImage || ''],
+      updatedAt: new Date().toISOString()
+    };
 
     if (existingIndex >= 0) {
-      products[existingIndex] = { ...products[existingIndex], ...productData, updatedAt: new Date().toISOString() };
+      products[existingIndex] = { ...products[existingIndex], ...fullProduct };
     } else {
-      const newProduct = {
-        id: productData.id || 'PROD-' + Math.floor(1000 + Math.random() * 9000),
-        status: 'Active',
-        rating: 5.0,
-        reviewsCount: 0,
-        createdAt: new Date().toISOString(),
-        ...productData
-      };
-      products.unshift(newProduct);
+      fullProduct.createdAt = new Date().toISOString();
+      products.unshift(fullProduct);
     }
 
-    this._set(STORAGE_KEYS.PRODUCTS, products);
-    return true;
+    this._setLocalStorage(STORAGE_KEYS.PRODUCTS, products);
+    this._cache.products = products;
+
+    // Realtime Supabase Database Sync
+    if (typeof SupabaseClientService !== 'undefined' && SupabaseClientService.isConfigured()) {
+      const client = SupabaseClientService.getClient();
+      if (client) {
+        try {
+          const { data, error } = await client.from('products').upsert({
+            id: prodId,
+            name: fullProduct.name,
+            slug: fullProduct.slug,
+            short_description: fullProduct.shortDescription,
+            description: fullProduct.description,
+            sku: fullProduct.sku,
+            brand: fullProduct.brand,
+            supplier_id: fullProduct.supplierId,
+            category_id: fullProduct.categoryId,
+            mrp: fullProduct.mrp,
+            selling_price: fullProduct.sellingPrice,
+            stock: fullProduct.stock,
+            low_stock_threshold: fullProduct.lowStockThreshold,
+            status: fullProduct.status,
+            main_image: fullProduct.mainImage,
+            updated_at: new Date().toISOString()
+          }, { onConflict: 'id' }).select();
+
+          if (error) {
+            console.error('⚠️ Supabase Product Sync Error:', error.message);
+          } else {
+            console.log('⚡ Product successfully published to Supabase:', prodId, data);
+          }
+        } catch (e) {
+          console.warn('Supabase product save exception:', e);
+        }
+      }
+    }
+
+    return fullProduct;
   },
 
-  deleteProduct(id) {
-    const products = this.getProducts();
-    const filtered = products.filter(p => p.id !== id);
-    this._set(STORAGE_KEYS.PRODUCTS, filtered);
+  async deleteProduct(id) {
+    const products = this.getProducts().filter(p => p.id !== id);
+    this._setLocalStorage(STORAGE_KEYS.PRODUCTS, products);
+    this._cache.products = products;
+
+    if (typeof SupabaseClientService !== 'undefined' && SupabaseClientService.isConfigured()) {
+      const client = SupabaseClientService.getClient();
+      if (client) {
+        try {
+          const { error } = await client.from('products').delete().eq('id', id);
+          if (error) {
+            console.error('⚠️ Supabase Product Delete Error:', error.message);
+          } else {
+            console.log('⚡ Product successfully deleted from Supabase:', id);
+          }
+        } catch (e) {
+          console.warn('Supabase product delete exception:', e);
+        }
+      }
+    }
     return true;
   },
 
   // ================= ORDERS API =================
   getOrders() {
-    return this._get(STORAGE_KEYS.ORDERS);
+    return this._cache.orders || this._getLocalStorage(STORAGE_KEYS.ORDERS);
   },
 
   getOrderById(id) {
@@ -647,16 +493,20 @@ const ZenDB = {
   getOrdersBySupplier(supplierId) {
     const orders = this.getOrders();
     return orders.filter(o => {
-      // Check if order contains items supplied by this supplier
-      return o.items && o.items.some(item => item.supplierId === supplierId);
+      return o.supplierId === supplierId || (o.items && o.items.some(item => item.supplierId === supplierId));
     });
   },
 
-  createOrder(orderData) {
+  async createOrder(orderData) {
     const orders = this.getOrders();
+    const todayStr = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    const seq = Math.floor(100 + Math.random() * 900);
+    const newOrderId = orderData.id || `ORD-${todayStr}-${seq}`;
+
     const newOrder = {
-      id: 'ORD-' + Math.floor(10000 + Math.random() * 90000),
-      orderStatus: 'Pending',
+      id: newOrderId,
+      orderStatus: orderData.orderStatus || 'Pending WhatsApp Confirmation',
+      paymentStatus: orderData.paymentStatus || 'Unpaid',
       supplierStatus: {},
       trackingNumber: '',
       createdAt: new Date().toISOString(),
@@ -664,82 +514,115 @@ const ZenDB = {
       ...orderData
     };
 
-    // Initialize supplierStatus for each supplier in the order
-    if (newOrder.items) {
-      newOrder.items.forEach(item => {
-        if (item.supplierId && !newOrder.supplierStatus[item.supplierId]) {
-          newOrder.supplierStatus[item.supplierId] = {
-            status: 'Pending',
-            trackingNumber: '',
-            shippedAt: null,
-            deliveredAt: null
-          };
-        }
-      });
-    }
-
     orders.unshift(newOrder);
-    this._set(STORAGE_KEYS.ORDERS, orders);
+    this._setLocalStorage(STORAGE_KEYS.ORDERS, orders);
+    this._cache.orders = orders;
 
-    // Update Product Stock Levels
+    // Deduct stock in local cache
     const products = this.getProducts();
     newOrder.items.forEach(item => {
       const p = products.find(prod => prod.id === item.productId);
-      if (p) {
-        p.stock = Math.max(0, p.stock - item.qty);
-      }
+      if (p) p.stock = Math.max(0, p.stock - item.qty);
     });
-    this._set(STORAGE_KEYS.PRODUCTS, products);
+    this._setLocalStorage(STORAGE_KEYS.PRODUCTS, products);
+    this._cache.products = products;
+
+    // Push Order to Supabase via RPC or SQL tables
+    if (typeof SupabaseClientService !== 'undefined' && SupabaseClientService.isConfigured()) {
+      const client = SupabaseClientService.getClient();
+      if (client) {
+        try {
+          // Attempt RPC with atomic stock check
+          const { data: rpcRes, error: rpcErr } = await client.rpc('create_order_with_stock_check', {
+            p_order_id: newOrderId,
+            p_customer_id: (newOrder.customerId && newOrder.customerId.includes('-')) ? null : newOrder.customerId,
+            p_customer_name: newOrder.customerName,
+            p_customer_email: newOrder.customerEmail,
+            p_customer_phone: newOrder.customerPhone,
+            p_shipping_address: newOrder.shippingAddress,
+            p_items: newOrder.items,
+            p_subtotal: newOrder.subtotal,
+            p_shipping_cost: newOrder.shipping || 0,
+            p_tax: newOrder.tax || 0,
+            p_total: newOrder.total,
+            p_buy_cost: newOrder.totalBuyCost || 0,
+            p_profit: newOrder.totalProfit || 0,
+            p_payment_method: newOrder.paymentMethod || 'Payment on WhatsApp / COD',
+            p_payment_status: 'unpaid',
+            p_order_status: 'pending_whatsapp_confirmation'
+          });
+
+          if (rpcErr) {
+            console.warn('RPC Order Insertion Fallback:', rpcErr.message);
+          }
+        } catch (e) {
+          console.warn('Supabase Order Push error:', e);
+        }
+      }
+    }
 
     return newOrder;
   },
 
-  updateOrderStatus(orderId, status) {
+  async updateOrderStatus(orderId, status) {
     const orders = this.getOrders();
     const order = orders.find(o => o.id === orderId);
     if (order) {
       order.orderStatus = status;
       order.updatedAt = new Date().toISOString();
       if (status === 'Paid') order.paymentStatus = 'Paid';
-      this._set(STORAGE_KEYS.ORDERS, orders);
+      this._setLocalStorage(STORAGE_KEYS.ORDERS, orders);
+      this._cache.orders = orders;
+
+      if (typeof SupabaseClientService !== 'undefined' && SupabaseClientService.isConfigured()) {
+        const client = SupabaseClientService.getClient();
+        if (client) {
+          await client.from('orders').update({
+            order_status: this._mapOrderStatusToEnum(status),
+            updated_at: new Date().toISOString()
+          }).eq('id', orderId);
+        }
+      }
       return true;
     }
     return false;
   },
 
-  updateSupplierFulfillment(orderId, supplierId, updateObj) {
+  async updateSupplierFulfillment(orderId, supplierId, updateObj) {
     const orders = this.getOrders();
     const order = orders.find(o => o.id === orderId);
-    if (order && order.supplierStatus[supplierId]) {
-      order.supplierStatus[supplierId] = {
-        ...order.supplierStatus[supplierId],
-        ...updateObj
-      };
-
+    if (order) {
       if (updateObj.trackingNumber) {
         order.trackingNumber = updateObj.trackingNumber;
       }
-
-      // Propagate supplier status to overall order status
       if (updateObj.status === 'Shipped') {
         order.orderStatus = 'Shipped';
       } else if (updateObj.status === 'Delivered') {
         order.orderStatus = 'Delivered';
         order.paymentStatus = 'Paid';
-      } else if (updateObj.status === 'Accepted' && order.orderStatus === 'Pending') {
-        order.orderStatus = 'Processing';
       }
-
       order.updatedAt = new Date().toISOString();
-      this._set(STORAGE_KEYS.ORDERS, orders);
+      this._setLocalStorage(STORAGE_KEYS.ORDERS, orders);
+      this._cache.orders = orders;
+
+      if (typeof SupabaseClientService !== 'undefined' && SupabaseClientService.isConfigured()) {
+        const client = SupabaseClientService.getClient();
+        if (client) {
+          await client.from('orders').update({
+            order_status: this._mapOrderStatusToEnum(order.orderStatus),
+            tracking_number: order.trackingNumber,
+            updated_at: new Date().toISOString()
+          }).eq('id', orderId);
+        }
+      }
       return true;
     }
     return false;
   },
 
-  // ================= SUPPLIERS API =================
+  // ================= SUPPLIERS & CATEGORIES API =================
   getSuppliers() {
-    return this._get(STORAGE_KEYS.SUPPLIERS);
+    return this._cache.suppliers || this._getLocalStorage(STORAGE_KEYS.SUPPLIERS);
   },
 
   getSupplierById(id) {
@@ -747,33 +630,23 @@ const ZenDB = {
     return suppliers.find(s => s.id === id) || null;
   },
 
-  saveSupplier(supplierData) {
-    const suppliers = this.getSuppliers();
-    const idx = suppliers.findIndex(s => s.id === supplierData.id);
-    if (idx >= 0) {
-      suppliers[idx] = { ...suppliers[idx], ...supplierData };
-    } else {
-      const newSup = {
-        id: 'SUP-' + Math.floor(100 + Math.random() * 900),
-        status: 'Active',
-        rating: 5.0,
-        totalPayout: 0,
-        ...supplierData
-      };
-      suppliers.push(newSup);
-    }
-    this._set(STORAGE_KEYS.SUPPLIERS, suppliers);
-    return true;
-  },
-
-  // ================= CATEGORIES API =================
   getCategories() {
-    return this._get(STORAGE_KEYS.CATEGORIES);
+    return this._cache.categories || this._getLocalStorage(STORAGE_KEYS.CATEGORIES);
   },
 
   // ================= USERS API =================
   getUsers() {
-    return this._get(STORAGE_KEYS.USERS);
+    let users = this._cache.users || this._getLocalStorage(STORAGE_KEYS.USERS) || [];
+    const adminUser = users.find(u => u.role === 'admin' || u.role === 'owner');
+    if (adminUser) {
+      adminUser.username = 'zeni';
+      adminUser.email = 'zeni@zenstore.com';
+      adminUser.password = 'zenn';
+    } else {
+      users.push({ id: 'USR-ADMIN', name: 'Zen Admin', username: 'zeni', email: 'zeni@zenstore.com', password: 'zenn', role: 'admin', phone: '+91 99000 00000' });
+      this._setLocalStorage(STORAGE_KEYS.USERS, users);
+    }
+    return users;
   },
 
   getUserByEmail(email) {
@@ -789,24 +662,93 @@ const ZenDB = {
     const newUser = {
       id: 'USR-' + Math.floor(1000 + Math.random() * 9000),
       role: 'customer',
+      addresses: [],
       ...userData
     };
     users.push(newUser);
-    this._set(STORAGE_KEYS.USERS, users);
+    this._setLocalStorage(STORAGE_KEYS.USERS, users);
+    this._cache.users = users;
     return { success: true, user: newUser };
+  },
+
+  saveGoogleUser(googleProfile) {
+    const users = this.getUsers();
+    let user = users.find(u => u.googleId === googleProfile.googleId || (u.email && u.email.toLowerCase() === googleProfile.email.toLowerCase()));
+    
+    if (user) {
+      user.googleId = googleProfile.googleId;
+      user.name = googleProfile.name || user.name;
+      user.photo = googleProfile.photo || user.photo;
+      if (!user.addresses) user.addresses = [];
+    } else {
+      user = {
+        id: googleProfile.id || 'CUST-' + Math.floor(1000 + Math.random() * 9000),
+        googleId: googleProfile.googleId,
+        name: googleProfile.name,
+        email: googleProfile.email,
+        photo: googleProfile.photo || '',
+        phone: googleProfile.phone || '',
+        role: 'customer',
+        addresses: [],
+        createdAt: new Date().toISOString()
+      };
+      users.push(user);
+    }
+    this._setLocalStorage(STORAGE_KEYS.USERS, users);
+    this._cache.users = users;
+    return user;
+  },
+
+  saveCustomerAddress(userId, addressObj) {
+    const users = this.getUsers();
+    const user = users.find(u => u.id === userId);
+    if (user) {
+      if (!user.addresses) user.addresses = [];
+      const existsIdx = user.addresses.findIndex(a => 
+        a.house === addressObj.house && a.pin === addressObj.pin
+      );
+      if (existsIdx >= 0) {
+        user.addresses[existsIdx] = { ...user.addresses[existsIdx], ...addressObj };
+      } else {
+        user.addresses.push({ id: 'ADDR-' + Date.now(), ...addressObj });
+      }
+      this._setLocalStorage(STORAGE_KEYS.USERS, users);
+      this._cache.users = users;
+
+      // Async push address to Supabase if configured
+      if (typeof SupabaseClientService !== 'undefined' && SupabaseClientService.isConfigured()) {
+        const client = SupabaseClientService.getClient();
+        if (client && userId && !userId.includes('CUST-')) {
+          client.from('addresses').insert({
+            user_id: userId,
+            full_name: addressObj.fullName || user.name,
+            phone: addressObj.phone || user.phone,
+            address_line1: addressObj.house,
+            area: addressObj.area,
+            city: addressObj.city,
+            state: addressObj.state,
+            postal_code: addressObj.pin,
+            country: 'India'
+          });
+        }
+      }
+
+      return user.addresses;
+    }
+    return [];
   },
 
   // ================= CART API =================
   getCart() {
-    return this._get(STORAGE_KEYS.CART);
+    return this._getLocalStorage(STORAGE_KEYS.CART);
   },
 
   saveCart(cartItems) {
-    this._set(STORAGE_KEYS.CART, cartItems);
+    this._setLocalStorage(STORAGE_KEYS.CART, cartItems);
   },
 
   clearCart() {
-    this._set(STORAGE_KEYS.CART, []);
+    this._setLocalStorage(STORAGE_KEYS.CART, []);
   }
 };
 

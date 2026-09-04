@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Master Orders - Zen Store Admin</title>
+  <title>Master Orders - Zen Store Owner Admin</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/admin.css">
 </head>
@@ -39,7 +39,7 @@
     <header class="admin-topbar">
       <div>
         <h1 class="page-header-title">Master Orders Management</h1>
-        <p style="color:var(--text-muted); font-size:0.85rem;">Track customer orders, supplier fulfillment status, and order P&L metrics</p>
+        <p style="color:var(--text-muted); font-size:0.85rem;">Track WhatsApp customer orders, payment verification, supplier assignments, and profit</p>
       </div>
     </header>
 
@@ -48,14 +48,21 @@
       <!-- Table Card -->
       <div class="table-card">
         <div class="table-toolbar">
-          <input type="text" id="order-search-input" class="form-control" placeholder="Search by Order ID or Customer Name..." style="max-width:320px;" oninput="filterOrdersTable()">
+          <input type="text" id="order-search-input" class="form-control" placeholder="Search Order ID, Customer Name, Phone..." style="max-width:320px;" oninput="filterOrdersTable()">
 
           <select id="filter-order-status" class="form-control form-select" style="width:auto;" onchange="filterOrdersTable()">
-            <option value="">All Fulfillment Statuses</option>
+            <option value="">All Order Statuses</option>
+            <option value="Pending WhatsApp Confirmation">Pending WhatsApp Confirmation</option>
             <option value="Confirmed">Confirmed</option>
             <option value="Processing">Processing</option>
+            <option value="Assigned to Supplier">Assigned to Supplier</option>
+            <option value="Accepted">Accepted</option>
             <option value="Shipped">Shipped</option>
+            <option value="Out for Delivery">Out for Delivery</option>
             <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Returned">Returned</option>
+            <option value="Refunded">Refunded</option>
           </select>
         </div>
 
@@ -64,13 +71,12 @@
             <thead>
               <tr>
                 <th>Order ID</th>
-                <th>Date</th>
                 <th>Customer</th>
-                <th>Total Revenue</th>
-                <th>Supplier Cost</th>
-                <th>Net Profit</th>
+                <th>Total</th>
                 <th>Payment</th>
-                <th>Fulfillment Status</th>
+                <th>Order Status</th>
+                <th>Supplier</th>
+                <th>Created</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -85,6 +91,9 @@
   </main>
 
   <!-- Core Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase-client.js"></script>
   <script src="../js/database.js"></script>
   <script src="../js/utils.js"></script>
   <script src="../js/auth.js"></script>
@@ -92,7 +101,7 @@
     let allOrders = [];
 
     document.addEventListener('DOMContentLoaded', () => {
-      if (!Auth.requireRole(['admin'])) return;
+      if (!Auth.requireRole(['admin', 'owner'])) return;
 
       allOrders = ZenDB.getOrders();
       renderOrdersTable(allOrders);
@@ -109,7 +118,7 @@
 
       let filtered = [...allOrders];
       if (q) {
-        filtered = filtered.filter(o => o.id.toLowerCase().includes(q) || o.customerName.toLowerCase().includes(q));
+        filtered = filtered.filter(o => o.id.toLowerCase().includes(q) || (o.customerName && o.customerName.toLowerCase().includes(q)) || (o.customerPhone && o.customerPhone.includes(q)));
       }
       if (status) {
         filtered = filtered.filter(o => o.orderStatus === status);
@@ -122,35 +131,52 @@
       const tbody = document.getElementById('admin-orders-tbody');
 
       if (!orders || orders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:2rem; color:var(--text-muted);">No matching orders found</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:2rem; color:var(--text-muted);">No matching orders found</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = orders.map(o => `
-        <tr>
-          <td style="font-weight:800; color:var(--primary);">${o.id}</td>
-          <td style="font-size:0.85rem;">${Utils.formatDate(o.createdAt)}</td>
-          <td>
-            <div style="font-weight:700;">${o.customerName}</div>
-            <div style="font-size:0.75rem; color:var(--text-muted);">${o.customerPhone || o.customerEmail}</div>
-          </td>
-          <td style="font-weight:800;">${Utils.formatINR(o.total)}</td>
-          <td style="color:var(--text-muted);">${Utils.formatINR(o.totalBuyCost)}</td>
-          <td style="font-weight:800; color:var(--success);">${Utils.formatINR(o.totalProfit)}</td>
-          <td><span class="badge badge-${o.paymentStatus === 'Paid' ? 'success' : 'warning'}">${o.paymentStatus} (${o.paymentMethod})</span></td>
-          <td>
-            <select class="form-control form-select" style="padding:0.2rem 0.5rem; font-size:0.8rem; font-weight:700;" onchange="changeOrderStatus('${o.id}', this.value)">
-              <option value="Confirmed" ${o.orderStatus === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
-              <option value="Processing" ${o.orderStatus === 'Processing' ? 'selected' : ''}>Processing</option>
-              <option value="Shipped" ${o.orderStatus === 'Shipped' ? 'selected' : ''}>Shipped</option>
-              <option value="Delivered" ${o.orderStatus === 'Delivered' ? 'selected' : ''}>Delivered</option>
-            </select>
-          </td>
-          <td>
-            <button class="btn btn-outline btn-sm" onclick="openOrderDetailModal('${o.id}')">Inspect</button>
-          </td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = orders.map(o => {
+        const supplierName = o.items && o.items[0] ? (ZenDB.getSupplierById(o.items[0].supplierId)?.companyName || o.items[0].supplierId) : 'Unassigned';
+
+        return `
+          <tr>
+            <td style="font-weight:800; color:var(--primary);">${o.id}</td>
+            <td>
+              <div style="font-weight:700;">${o.customerName || 'Guest'}</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">${o.customerPhone || o.customerEmail || ''}</div>
+            </td>
+            <td style="font-weight:800;">${Utils.formatINR(o.total)}</td>
+            <td>
+              <select class="form-control form-select" style="padding:0.2rem 0.4rem; font-size:0.75rem; font-weight:700;" onchange="changePaymentStatus('${o.id}', this.value)">
+                <option value="Unpaid" ${o.paymentStatus === 'Unpaid' ? 'selected' : ''}>Unpaid</option>
+                <option value="COD" ${o.paymentStatus === 'COD' ? 'selected' : ''}>COD</option>
+                <option value="Paid" ${o.paymentStatus === 'Paid' ? 'selected' : ''}>Paid</option>
+                <option value="Refunded" ${o.paymentStatus === 'Refunded' ? 'selected' : ''}>Refunded</option>
+              </select>
+            </td>
+            <td>
+              <select class="form-control form-select" style="padding:0.2rem 0.4rem; font-size:0.75rem; font-weight:700;" onchange="changeOrderStatus('${o.id}', this.value)">
+                <option value="Pending WhatsApp Confirmation" ${o.orderStatus === 'Pending WhatsApp Confirmation' ? 'selected' : ''}>Pending WhatsApp Confirmation</option>
+                <option value="Confirmed" ${o.orderStatus === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                <option value="Processing" ${o.orderStatus === 'Processing' ? 'selected' : ''}>Processing</option>
+                <option value="Assigned to Supplier" ${o.orderStatus === 'Assigned to Supplier' ? 'selected' : ''}>Assigned to Supplier</option>
+                <option value="Accepted" ${o.orderStatus === 'Accepted' ? 'selected' : ''}>Accepted</option>
+                <option value="Shipped" ${o.orderStatus === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                <option value="Out for Delivery" ${o.orderStatus === 'Out for Delivery' ? 'selected' : ''}>Out for Delivery</option>
+                <option value="Delivered" ${o.orderStatus === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                <option value="Cancelled" ${o.orderStatus === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                <option value="Returned" ${o.orderStatus === 'Returned' ? 'selected' : ''}>Returned</option>
+                <option value="Refunded" ${o.orderStatus === 'Refunded' ? 'selected' : ''}>Refunded</option>
+              </select>
+            </td>
+            <td style="font-size:0.8rem; font-weight:600;">${supplierName}</td>
+            <td style="font-size:0.8rem; color:var(--text-muted);">${Utils.formatDate(o.createdAt)}</td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="openOrderDetailModal('${o.id}')">Inspect</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
     function changeOrderStatus(orderId, newStatus) {
@@ -158,6 +184,18 @@
       allOrders = ZenDB.getOrders();
       filterOrdersTable();
       Utils.showToast(`Order #${orderId} status updated to ${newStatus}`, 'success');
+    }
+
+    function changePaymentStatus(orderId, newPaymentStatus) {
+      const orders = ZenDB.getOrders();
+      const o = orders.find(item => item.id === orderId);
+      if (o) {
+        o.paymentStatus = newPaymentStatus;
+        ZenDB._set(STORAGE_KEYS.ORDERS, orders);
+        allOrders = ZenDB.getOrders();
+        filterOrdersTable();
+        Utils.showToast(`Order #${orderId} payment status set to ${newPaymentStatus}`, 'success');
+      }
     }
 
     function openOrderDetailModal(orderId) {
@@ -168,7 +206,7 @@
         <div style="display:flex; flex-direction:column; gap:1.25rem;">
           <div style="background:var(--surface-alt); padding:1rem; border-radius:var(--radius-md); font-size:0.9rem;">
             <div style="font-weight:700; margin-bottom:0.25rem;">Shipping Address:</div>
-            <div>${o.customerName} - ${o.customerPhone}</div>
+            <div>${o.customerName} - ${o.customerPhone} (${o.customerEmail})</div>
             <div style="color:var(--text-muted);">${o.shippingAddress.house}, ${o.shippingAddress.area}, ${o.shippingAddress.city}, ${o.shippingAddress.state} - ${o.shippingAddress.pin}</div>
           </div>
 

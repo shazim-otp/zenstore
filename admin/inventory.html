@@ -71,12 +71,13 @@
   </main>
 
   <!-- Core Scripts -->
+  <script src="../js/config.js"></script>
   <script src="../js/database.js"></script>
   <script src="../js/utils.js"></script>
   <script src="../js/auth.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      if (!Auth.requireRole(['admin'])) return;
+      if (!Auth.requireRole(['admin', 'owner'])) return;
 
       renderInventory();
     });
@@ -118,14 +119,14 @@
       }).join('');
     }
 
-    function saveStockUpdate(id) {
+    async function saveStockUpdate(id) {
       const newStock = Number(document.getElementById(`stock-inp-${id}`).value);
       if (isNaN(newStock) || newStock < 0) return;
 
       const p = ZenDB.getProductById(id);
       if (p) {
         p.stock = newStock;
-        ZenDB.saveProduct(p);
+        await ZenDB.saveProduct(p);
         renderInventory();
         Utils.showToast(`Updated stock for ${p.name} to ${newStock} units`, 'success');
       }
