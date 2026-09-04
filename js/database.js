@@ -609,10 +609,37 @@ const ZenDB = {
     return false;
   },
 
+  async updateProductStock(id, newStock) {
+    const products = this.getProducts();
+    const product = products.find(p => p.id === id);
+    if (product) {
+      product.stock = Math.max(0, Number(newStock));
+      product.updatedAt = new Date().toISOString();
+      this._setLocalStorage(STORAGE_KEYS.PRODUCTS, products);
+      this._cache.products = products;
+
+      await this._pushProductToSupabase(product);
+      window.dispatchEvent(new CustomEvent('zenstore:db-synced'));
+      return true;
+    }
+    return false;
+  },
+
   async updateSupplierFulfillment(orderId, supplierId, updateObj) {
     const orders = this.getOrders();
     const order = orders.find(o => o.id === orderId);
     if (order) {
+      if (!order.supplierStatus) order.supplierStatus = {};
+      
+      const prevStatus = order.supplierStatus[supplierId] || {};
+      order.supplierStatus[supplierId] = {
+        status: updateObj.status || prevStatus.status || 'Pending',
+        trackingNumber: updateObj.trackingNumber || prevStatus.trackingNumber || '',
+        shippedAt: updateObj.shippedAt || prevStatus.shippedAt || null,
+        deliveredAt: updateObj.deliveredAt || prevStatus.deliveredAt || null,
+        updatedAt: new Date().toISOString()
+      };
+
       if (updateObj.trackingNumber) {
         order.trackingNumber = updateObj.trackingNumber;
       }

@@ -22,13 +22,27 @@
       <a href="products.html" class="sidebar-link active" style="color:#FFF;"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg><span>Supplied Products</span></a>
       <a href="profile.html" class="sidebar-link" style="color:#94A3B8;"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><span>Earnings & Profile</span></a>
     </div>
+
+    <div style="padding:1rem 1.25rem; border-top:1px solid #334155; display:flex; justify-content:space-between; align-items:center;">
+      <div id="supplier-name-tag" style="font-weight:700; font-size:0.85rem;">Supplier Portal</div>
+      <button onclick="Auth.logout()" class="btn-icon" style="color:#94A3B8;" title="Logout">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      </button>
+    </div>
   </aside>
 
   <!-- Main Content -->
   <main class="supplier-main">
-    <header style="background:var(--surface); border-bottom:1px solid var(--border); padding:1rem 2rem;">
-      <h1 style="font-size:1.5rem; font-weight:800;">Supplied Products Inventory</h1>
-      <p style="color:var(--text-muted); font-size:0.85rem;">Products supplied by your company to Zen Store</p>
+    <header style="background:var(--surface); border-bottom:1px solid var(--border); padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h1 style="font-size:1.5rem; font-weight:800;" id="page-title">Supplied Products Inventory</h1>
+        <p style="color:var(--text-muted); font-size:0.85rem;">Products supplied by your company & live warehouse stock levels</p>
+      </div>
+
+      <div style="display:flex; gap:0.75rem;">
+        <button onclick="openAddProductModal()" class="btn btn-primary btn-sm">+ Supply New Product</button>
+        <button onclick="Auth.logout()" class="btn btn-outline btn-sm">Sign Out</button>
+      </div>
     </header>
 
     <div style="padding:2rem;">
@@ -36,11 +50,12 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>Product</th>
+              <th>Product Details</th>
               <th>SKU</th>
               <th>Unit Buy Price</th>
               <th>Current Stock</th>
               <th>Stock Status</th>
+              <th style="text-align:right;">Actions</th>
             </tr>
           </thead>
           <tbody id="sup-products-tbody">
@@ -51,8 +66,75 @@
     </div>
   </main>
 
+  <!-- Add Product Modal -->
+  <div id="add-product-modal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.6); z-index:1000; align-items:center; justify-content:center; padding:1.5rem;">
+    <div class="card" style="max-width:540px; width:100%; padding:2rem; max-height:90vh; overflow-y:auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">
+        <h2 style="font-size:1.3rem; font-weight:800;">Add Product to Supply Catalog</h2>
+        <button onclick="closeAddProductModal()" style="background:none; border:none; font-size:1.25rem; cursor:pointer; color:var(--text-muted);">&times;</button>
+      </div>
+
+      <form id="sup-add-prod-form" onsubmit="handleSupplierAddProduct(event)">
+        <div class="form-group">
+          <label class="form-label">Product Title <span class="required">*</span></label>
+          <input type="text" id="sup-p-name" class="form-control" placeholder="e.g. ZenBuds Wireless Stereo" required>
+        </div>
+
+        <div class="grid grid-cols-2">
+          <div class="form-group">
+            <label class="form-label">Category <span class="required">*</span></label>
+            <select id="sup-p-cat" class="form-control form-select" required>
+              <option value="CAT-ELEC">Electronics & Audio</option>
+              <option value="CAT-WEAR">Smart Wearables</option>
+              <option value="CAT-HOME">Home & Office</option>
+              <option value="CAT-PERC">Personal Care & Tech</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Brand Name</label>
+            <input type="text" id="sup-p-brand" class="form-control" placeholder="Zen Store">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2">
+          <div class="form-group">
+            <label class="form-label">Unit Buy Price (COGS ₹) <span class="required">*</span></label>
+            <input type="number" id="sup-p-buyprice" class="form-control" placeholder="1100" min="1" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Retail Selling Price (₹) <span class="required">*</span></label>
+            <input type="number" id="sup-p-sellingprice" class="form-control" placeholder="2499" min="1" required>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2">
+          <div class="form-group">
+            <label class="form-label">Initial Warehouse Stock <span class="required">*</span></label>
+            <input type="number" id="sup-p-stock" class="form-control" placeholder="50" min="0" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">SKU</label>
+            <input type="text" id="sup-p-sku" class="form-control" placeholder="Automatic if left blank">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Main Image URL</label>
+          <input type="url" id="sup-p-img" class="form-control" placeholder="https://images.unsplash.com/photo-...">
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeAddProductModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save & Submit Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Core Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/config.js"></script>
+  <script src="../js/supabase-client.js"></script>
   <script src="../js/database.js"></script>
   <script src="../js/utils.js"></script>
   <script src="../js/auth.js"></script>
@@ -64,6 +146,12 @@
       const user = Auth.getCurrentUser();
       if (user && user.supplierId) currentSupplierId = user.supplierId;
 
+      const supObj = ZenDB.getSupplierById(currentSupplierId);
+      if (supObj) {
+        document.getElementById('supplier-name-tag').textContent = supObj.name;
+        document.getElementById('page-title').textContent = `${supObj.companyName} - Supplied Products`;
+      }
+
       renderSuppliedProducts();
     });
 
@@ -72,24 +160,101 @@
       const tbody = document.getElementById('sup-products-tbody');
 
       if (!products || products.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--text-muted);">No products assigned to this supplier</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:3rem; color:var(--text-muted);">No products registered under this supplier yet. Click "+ Supply New Product" to add items.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = products.map(p => `
-        <tr>
-          <td>
-            <div style="display:flex; align-items:center; gap:0.75rem;">
-              <img src="${p.mainImage}" style="width:40px; height:40px; border-radius:4px; object-fit:cover;">
-              <div style="font-weight:700;">${p.name}</div>
-            </div>
-          </td>
-          <td style="font-family:monospace; font-weight:700;">${p.sku}</td>
-          <td style="font-weight:800; color:var(--success);">${Utils.formatINR(p.buyPrice)}</td>
-          <td style="font-weight:700;">${p.stock} units</td>
-          <td><span class="status-pill active">Active Supply</span></td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = products.map(p => {
+        let stockPill = '<span class="status-pill active">In Stock</span>';
+        if (p.stock === 0) stockPill = '<span class="status-pill danger">Out of Stock</span>';
+        else if (p.stock <= 10) stockPill = '<span class="status-pill warning">Low Stock</span>';
+
+        return `
+          <tr>
+            <td>
+              <div style="display:flex; align-items:center; gap:0.75rem;">
+                <img src="${p.mainImage || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80'}" style="width:44px; height:44px; border-radius:var(--radius-md); object-fit:cover; border:1px solid var(--border);">
+                <div>
+                  <div style="font-weight:700; color:var(--text-main);">${p.name}</div>
+                  <div style="font-size:0.75rem; color:var(--text-muted);">${p.brand || 'Zen Store'}</div>
+                </div>
+              </div>
+            </td>
+            <td style="font-family:monospace; font-weight:700; font-size:0.85rem;">${p.sku}</td>
+            <td style="font-weight:800; color:var(--success);">${Utils.formatINR(p.buyPrice)}</td>
+            <td>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <input type="number" id="stock-inp-${p.id}" class="form-control form-control-sm" style="width:80px; padding:0.3rem 0.5rem; text-align:center; font-weight:700;" value="${p.stock}" min="0">
+                <span style="font-size:0.8rem; color:var(--text-muted);">units</span>
+              </div>
+            </td>
+            <td>${stockPill}</td>
+            <td style="text-align:right;">
+              <button class="btn btn-secondary btn-sm" onclick="saveStock('${p.id}')">Save Stock</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function saveStock(productId) {
+      const input = document.getElementById(`stock-inp-${productId}`);
+      if (!input) return;
+      const newStock = Number(input.value);
+
+      const res = await ZenDB.updateProductStock(productId, newStock);
+      if (res) {
+        Utils.showToast(`Stock updated for ${productId} to ${newStock} units!`, 'success');
+        renderSuppliedProducts();
+      } else {
+        Utils.showToast('Failed to update stock', 'error');
+      }
+    }
+
+    function openAddProductModal() {
+      document.getElementById('add-product-modal').style.display = 'flex';
+    }
+
+    function closeAddProductModal() {
+      document.getElementById('add-product-modal').style.display = 'none';
+      document.getElementById('sup-add-prod-form').reset();
+    }
+
+    async function handleSupplierAddProduct(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('sup-p-name').value.trim();
+      const categoryId = document.getElementById('sup-p-cat').value;
+      const brand = document.getElementById('sup-p-brand').value.trim() || 'Zen Store';
+      const buyPrice = Number(document.getElementById('sup-p-buyprice').value);
+      const sellingPrice = Number(document.getElementById('sup-p-sellingprice').value);
+      const stock = Number(document.getElementById('sup-p-stock').value);
+      const sku = document.getElementById('sup-p-sku').value.trim() || ('SUP-' + Date.now().toString().slice(-6));
+      const mainImage = document.getElementById('sup-p-img').value.trim() || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80';
+
+      const mrp = Math.round(sellingPrice * 1.35);
+
+      const newProduct = {
+        name,
+        categoryId,
+        brand,
+        supplierId: currentSupplierId,
+        buyPrice,
+        sellingPrice,
+        mrp,
+        stock,
+        sku,
+        mainImage,
+        images: [mainImage],
+        status: 'Active'
+      };
+
+      const res = await ZenDB.saveProduct(newProduct);
+      if (res) {
+        Utils.showToast(`Product "${name}" added to your supply catalog!`, 'success');
+        closeAddProductModal();
+        renderSuppliedProducts();
+      }
     }
   </script>
 </body>
