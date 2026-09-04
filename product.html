@@ -20,7 +20,7 @@
       <div class="header-search">
         <div class="search-input-wrapper">
           <input type="text" id="search-input" class="search-input" placeholder="Search catalog..." autocomplete="off">
-          <button class="search-btn">🔍</button>
+          <button class="search-btn"><svg style="width:18px;height:18px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></button>
         </div>
         <div id="search-dropdown" class="search-results-dropdown"></div>
       </div>
@@ -110,10 +110,10 @@
         <!-- CTA Buttons -->
         <div class="pdp-cta-group" style="margin-top:1rem;">
           <button id="pdp-add-cart-btn" class="btn btn-primary btn-lg" onclick="handleAddToCart()">
-            🛒 Add to Cart
+            Add to Cart
           </button>
           <button id="pdp-buy-now-btn" class="btn btn-success btn-lg" onclick="handleBuyNow()">
-            ⚡ Buy Now
+            Buy Now
           </button>
         </div>
 
@@ -129,9 +129,9 @@
 
         <!-- Value Badges -->
         <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.75rem; border-top:1px solid var(--border); padding-top:1rem; margin-top:1rem; text-align:center; font-size:0.8rem; color:var(--text-muted);">
-          <div>🚚 <strong>Free Shipping</strong><br>On orders over ₹999</div>
-          <div>🔄 <strong>7 Days Return</strong><br>Hassle-free replacement</div>
-          <div>🛡️ <strong>1 Year Warranty</strong><br>100% Genuine product</div>
+          <div><strong>Free Shipping</strong><br>On orders over ₹999</div>
+          <div><strong>7 Days Return</strong><br>Hassle-free replacement</div>
+          <div><strong>1 Year Warranty</strong><br>100% Genuine product</div>
         </div>
 
       </div>
@@ -324,10 +324,10 @@
       const pin = document.getElementById('pincode-input').value.trim();
       const res = document.getElementById('pin-check-result');
       if (pin.length === 6 && /^\d+$/.test(pin)) {
-        res.innerHTML = `✅ Express Delivery by <strong>Tomorrow, 5:00 PM</strong> to <strong>PIN ${pin}</strong>. Cash on Delivery Available.`;
+        res.innerHTML = `Express Delivery by <strong>Tomorrow, 5:00 PM</strong> to <strong>PIN ${pin}</strong>. Cash on Delivery Available.`;
         res.style.color = 'var(--success-text)';
       } else {
-        res.innerHTML = `❌ Please enter a valid 6-digit PIN code.`;
+        res.innerHTML = `Please enter a valid 6-digit PIN code.`;
         res.style.color = 'var(--danger)';
       }
     }

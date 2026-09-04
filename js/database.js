@@ -464,9 +464,9 @@ const ZenDB = {
       }, { onConflict: 'id' }).select();
 
       if (error) {
-        console.error('⚠️ Supabase Product Sync Error:', error.message);
+        console.error('[Supabase] Product Sync Error:', error.message);
       } else {
-        console.log('⚡ Product successfully synchronized with Supabase:', fullProduct.id);
+        console.log('[Supabase] Product synchronized:', fullProduct.id);
       }
     } catch (e) {
       console.warn('Supabase product push exception:', e);
@@ -484,9 +484,9 @@ const ZenDB = {
         try {
           const { error } = await client.from('products').delete().eq('id', id);
           if (error) {
-            console.error('⚠️ Supabase Product Delete Error:', error.message);
+            console.error('[Supabase] Product Delete Error:', error.message);
           } else {
-            console.log('⚡ Product successfully deleted from Supabase:', id);
+            console.log('[Supabase] Product deleted:', id);
           }
         } catch (e) {
           console.warn('Supabase product delete exception:', e);

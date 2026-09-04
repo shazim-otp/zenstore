@@ -117,7 +117,7 @@ function renderProductCard(p) {
         </div>
         <div class="product-card-actions">
           <button class="btn btn-primary btn-add-cart" onclick="Cart.addItem('${p.id}')">
-            🛒 Add to Cart
+            Add to Cart
           </button>
         </div>
       </div>

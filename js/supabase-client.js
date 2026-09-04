@@ -29,7 +29,7 @@ const SupabaseClientService = {
             detectSessionInUrl: true
           }
         });
-        console.log('⚡ Supabase Client initialized successfully.');
+        console.log('[Supabase] Client initialized successfully.');
       } catch (e) {
         console.error('Supabase Initialization Error:', e);
       }

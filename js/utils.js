@@ -33,10 +33,10 @@ const Utils = {
     toast.className = `toast toast-${type}`;
 
     const icons = {
-      success: '✅',
-      error: '❌',
-      warning: '⚠️',
-      info: 'ℹ️'
+      success: '<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#10B981" style="display:block;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>',
+      error: '<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#EF4444" style="display:block;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>',
+      warning: '<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#F59E0B" style="display:block;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>',
+      info: '<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#3B82F6" style="display:block;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
     };
 
     const titles = {
@@ -47,7 +47,7 @@ const Utils = {
     };
 
     toast.innerHTML = `
-      <div class="toast-icon">${icons[type] || 'ℹ️'}</div>
+      <div class="toast-icon">${icons[type] || icons.info}</div>
       <div class="toast-content">
         <div class="toast-title">${titles[type]}</div>
         <div class="toast-message">${message}</div>

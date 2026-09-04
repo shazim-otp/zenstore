@@ -83,7 +83,9 @@
       if (!orders || orders.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
-            <div class="empty-state-icon">📦</div>
+            <div class="empty-state-icon">
+              <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="var(--text-light)" style="margin:0 auto;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            </div>
             <h2 class="empty-state-title">No Orders Placed Yet</h2>
             <p class="empty-state-description">When you place an order, your tracking details and history will appear here.</p>
             <a href="shop.html" class="btn btn-primary">Start Shopping</a>
@@ -98,15 +100,15 @@
         const payStatusClass = o.paymentStatus === 'Paid' ? 'badge-success' : 'badge-warning';
 
         return `
-          <div class="card" style="margin-bottom:1.5rem; overflow:hidden; ${isTarget ? 'border:2px solid var(--primary); box-shadow:0 0 15px rgba(99,102,241,0.2);' : ''}">
-            <div class="card-header" style="background:var(--surface-alt); flex-wrap:wrap; gap:0.5rem;">
+          <div class="card order-history-card ${isTarget ? 'highlighted' : ''}" style="margin-bottom:1.5rem; ${isTarget ? 'border:2px solid var(--primary);' : ''}">
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; background:var(--surface-alt); padding:1rem 1.25rem;">
               <div>
-                <span style="font-weight:800; font-size:1.1rem; color:var(--text-main);">Order #${o.id}</span>
-                <span style="font-size:0.85rem; color:var(--text-muted); margin-left:0.75rem;">Placed on ${Utils.formatDate(o.createdAt)}</span>
+                <span style="font-weight:800; font-family:monospace; font-size:1.05rem;">Order #${o.id}</span>
+                <span style="color:var(--text-muted); font-size:0.8rem; margin-left:0.5rem;">Placed on ${Utils.formatDate(o.createdAt)}</span>
               </div>
-              <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
-                <span class="badge ${payStatusClass}">Payment: ${o.paymentStatus || 'Unpaid'}</span>
-                <span class="badge ${statusClass}">${o.orderStatus}</span>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span class="badge ${payStatusClass}">${o.paymentStatus}</span>
+                <span class="status-pill ${statusClass}">${o.orderStatus}</span>
                 <span style="font-weight:800; font-size:1.1rem; color:var(--primary);">${Utils.formatINR(o.total)}</span>
               </div>
             </div>
@@ -125,7 +127,7 @@
                 </div>
                 ${o.trackingNumber ? `
                   <div style="margin-top:0.85rem; font-size:0.85rem; font-weight:700; color:var(--primary); background:var(--primary-light); padding:0.5rem 0.85rem; border-radius:var(--radius-sm); display:inline-block;">
-                    🚚 Carrier Tracking #: <strong>${o.trackingNumber}</strong>
+                    Carrier Tracking #: <strong>${o.trackingNumber}</strong>
                   </div>
                 ` : ''}
               </div>

@@ -14,13 +14,13 @@ const FirebaseAuthService = {
 
   init() {
     if (!this.isConfigured()) {
-      console.log('ℹ️ Firebase Auth is unconfigured. Set CONFIG.FIREBASE credentials in js/config.js.');
+      console.log('[Firebase] Auth is unconfigured. Set CONFIG.FIREBASE credentials in js/config.js.');
       return false;
     }
 
     if (typeof firebase !== 'undefined' && !firebase.apps.length) {
       firebase.initializeApp(CONFIG.FIREBASE);
-      console.log('✅ Firebase Authentication initialized successfully.');
+      console.log('[Firebase] Authentication initialized successfully.');
       return true;
     }
     return typeof firebase !== 'undefined' && firebase.apps.length > 0;

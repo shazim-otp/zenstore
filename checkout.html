@@ -16,7 +16,7 @@
         <div class="logo-icon">Z</div>
         <div class="logo-text">Zen<span>Store</span></div>
       </a>
-      <div style="font-weight:700; font-size:1.1rem; color:var(--text-muted);">💬 WhatsApp Order Confirmation</div>
+      <div style="font-weight:700; font-size:1.1rem; color:var(--text-muted);">WhatsApp Order Confirmation</div>
     </div>
   </header>
 
@@ -33,7 +33,7 @@
         <!-- Saved Address Picker (For Logged in Customers) -->
         <div id="saved-addresses-card" class="card" style="padding:1.25rem 1.5rem; margin-bottom:1.5rem; display:none; background:var(--surface-alt); border:1px solid var(--primary-light);">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <label style="font-weight:700; font-size:0.95rem; color:var(--text-main);">📍 Select Saved Address:</label>
+            <label style="font-weight:700; font-size:0.95rem; color:var(--text-main);">Select Saved Address:</label>
             <button type="button" class="btn btn-outline btn-sm" onclick="clearAddressFields()">+ New Address</button>
           </div>
           <select id="saved-address-select" class="form-control form-select" style="margin-top:0.75rem;" onchange="applySavedAddress(this.value)">
@@ -106,7 +106,7 @@
             <!-- Online Payment Option (Disabled) -->
             <div style="border:1.5px dashed var(--border); border-radius:var(--radius-md); padding:1rem; opacity:0.6; background:var(--surface-alt); display:flex; align-items:center; justify-content:space-between;">
               <div>
-                <div style="font-weight:700; font-size:1rem; color:var(--text-muted);">💳 Online Card / NetBanking / Wallet</div>
+                <div style="font-weight:700; font-size:1rem; color:var(--text-muted);">Online Card / NetBanking / Wallet</div>
                 <div style="font-size:0.8rem; color:var(--text-muted);">Direct website online payment gateway</div>
               </div>
               <button type="button" class="btn btn-sm btn-outline" disabled style="cursor:not-allowed; opacity:0.7;">Disabled</button>
@@ -115,7 +115,7 @@
             <!-- UPI Option (Disabled) -->
             <div style="border:1.5px dashed var(--border); border-radius:var(--radius-md); padding:1rem; opacity:0.6; background:var(--surface-alt); display:flex; align-items:center; justify-content:space-between;">
               <div>
-                <div style="font-weight:700; font-size:1rem; color:var(--text-muted);">📱 Instant UPI / QR Code</div>
+                <div style="font-weight:700; font-size:1rem; color:var(--text-muted);">Instant UPI / QR Code</div>
                 <div style="font-size:0.8rem; color:var(--text-muted);">Google Pay, PhonePe, Paytm</div>
               </div>
               <button type="button" class="btn btn-sm btn-outline" disabled style="cursor:not-allowed; opacity:0.7;">Disabled</button>
@@ -124,7 +124,6 @@
             <!-- WhatsApp Order Submission Notice -->
             <div style="background:rgba(34, 197, 94, 0.1); border:1.5px solid #22C55E; border-radius:var(--radius-md); padding:1.25rem;">
               <div style="display:flex; align-items:center; gap:0.75rem; font-weight:800; color:#15803D; font-size:1.05rem;">
-                <span style="font-size:1.5rem;">💬</span>
                 <span>Order Placement via WhatsApp</span>
               </div>
               <p style="font-size:0.85rem; color:var(--text-main); margin-top:0.5rem; line-height:1.5;">
@@ -162,7 +161,7 @@
           </button>
           
           <div style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin-top:0.75rem;">
-            ⚡ Fast 1-Click Order Dispatch to WhatsApp Business
+            Fast 1-Click Order Dispatch to WhatsApp Business
           </div>
         </div>
       </div>
@@ -172,7 +171,9 @@
     <!-- Post-Order WhatsApp Confirmation View (Initially Hidden) -->
     <div id="whatsapp-confirmation-view" style="display:none; max-width:680px; margin:2rem auto; text-align:center;">
       <div class="card" style="padding:3rem 2rem; box-shadow:var(--shadow-xl);">
-        <div style="font-size:3.5rem; margin-bottom:1rem;">🎉</div>
+        <div style="width:64px; height:64px; border-radius:50%; background:var(--success-bg); color:var(--success); display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem auto;">
+          <svg style="width:36px; height:36px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        </div>
         <h2 style="font-size:1.8rem; font-weight:800; color:var(--text-main); margin-bottom:0.5rem;">Order Created Successfully!</h2>
         <p style="color:var(--text-muted); font-size:1rem; margin-bottom:1.5rem;">
           Your order has been saved and prepared for WhatsApp confirmation.
@@ -182,20 +183,20 @@
           <div style="font-size:0.85rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Order Identification</div>
           <div style="font-size:1.5rem; font-weight:800; color:var(--primary); margin:0.35rem 0;" id="conf-order-id">#ORD-20260830-001</div>
           <div style="font-size:0.9rem; font-weight:700; color:#Eab308;">
-            ⚠️ WhatsApp confirmation is required to process your order.
+            WhatsApp confirmation is required to process your order.
           </div>
         </div>
 
         <!-- Action Buttons -->
         <div style="display:flex; flex-direction:column; gap:1rem; max-width:400px; margin:0 auto;">
           <a href="#" id="conf-reopen-wa-btn" target="_blank" class="btn btn-lg" style="background:#22C55E; color:#FFF; font-weight:800; display:flex; align-items:center; justify-content:center; gap:0.6rem;">
-            💬 Open WhatsApp Again
+            Open WhatsApp Again
           </a>
           <a href="#" id="conf-view-order-btn" class="btn btn-primary btn-lg" style="font-weight:700;">
-            📦 View My Order Details
+            View My Order Details
           </a>
           <a href="shop.html" class="btn btn-outline btn-lg" style="font-weight:700;">
-            🛍️ Continue Shopping
+            Continue Shopping
           </a>
         </div>
 
@@ -385,7 +386,7 @@
       }).join('\n\n');
 
       const waMsg = 
-`🛍️ NEW ORDER
+`NEW ORDER
 
 Order ID: #${newOrder.id}
 
