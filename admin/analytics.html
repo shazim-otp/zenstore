@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profit & Loss Analytics - Zen Store Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon" style="width:32px; height:32px; font-size:1.1rem;">Z</div>
+      <div class="sidebar-brand-title">Zen<span>Admin</span></div>
+    </div>
+
+    <nav class="sidebar-menu">
+      <div class="menu-category-title">Core Management</div>
+      <a href="index.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg><span>Dashboard Overview</span></a>
+      <a href="orders.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg><span>Orders</span></a>
+      <a href="products.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg><span>Products</span></a>
+      <a href="add-product.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg><span>Add Product (Live Preview)</span></a>
+
+      <div class="menu-category-title">Operations & Network</div>
+      <a href="suppliers.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg><span>Suppliers</span></a>
+      <a href="inventory.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span>Inventory Stock</span></a>
+      <a href="customers.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg><span>Customers</span></a>
+
+      <div class="menu-category-title">Financial & Analytics</div>
+      <a href="analytics.html" class="sidebar-link active"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg><span>Profit & Loss Analytics</span></a>
+      <a href="settings.html" class="sidebar-link"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span>Settings</span></a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <header class="admin-topbar">
+      <div>
+        <h1 class="page-header-title">Dedicated Profit & Loss Analytics</h1>
+        <p style="color:var(--text-muted); font-size:0.85rem;">Comprehensive breakdown of revenue, supplier buy costs, shipping fees, taxes, and net profit</p>
+      </div>
+
+      <div style="display:flex; gap:0.5rem;">
+        <button class="btn btn-outline btn-sm" onclick="renderAnalytics('today')">Today</button>
+        <button class="btn btn-outline btn-sm" onclick="renderAnalytics('week')">This Week</button>
+        <button class="btn btn-primary btn-sm" onclick="renderAnalytics('all')">All Time</button>
+      </div>
+    </header>
+
+    <div class="admin-content">
+
+      <!-- Financial Metrics Summary Cards -->
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:1.25rem; margin-bottom:2rem;">
+        <div class="stat-card">
+          <span class="stat-card-title">Total Revenue</span>
+          <div class="stat-card-value" id="pnl-revenue">₹0</div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Gross Customer Payments</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card-title">Supplier Buy Costs</span>
+          <div class="stat-card-value" id="pnl-buy-cost" style="color:var(--warning);">₹0</div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Total COGS Paid to Suppliers</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card-title">Platform & Shipping Fees</span>
+          <div class="stat-card-value" id="pnl-expenses" style="color:var(--danger);">₹0</div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Shipping + Platform Commission</div>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-card-title">Net Realized Profit</span>
+          <div class="stat-card-value" id="pnl-net-profit" style="color:var(--success);">₹0</div>
+          <div class="stat-card-footer stat-trend-up" id="pnl-net-margin">Margin: 0%</div>
+        </div>
+      </div>
+
+      <!-- Product Profitability Table -->
+      <div class="table-card">
+        <div class="table-toolbar">
+          <h3 style="font-size:1.1rem; font-weight:700;">Product Profitability Breakdown</h3>
+        </div>
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Orders Count</th>
+                <th>Units Sold</th>
+                <th>Total Revenue</th>
+                <th>Total Buy Cost</th>
+                <th>Shipping & Fees</th>
+                <th>Net Profit</th>
+                <th>Profit Margin %</th>
+              </tr>
+            </thead>
+            <tbody id="pnl-product-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Core Scripts -->
+  <script src="../js/config.js"></script>
+  <script src="../js/database.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Auth.requireRole(['admin', 'owner'])) return;
+
+      renderAnalytics('all');
+    });
+
+    function renderAnalytics(range) {
+      const orders = ZenDB.getOrders();
+      const products = ZenDB.getProducts();
+
+      let totalRev = 0;
+      let totalBuy = 0;
+      let totalExpenses = 0;
+      let totalProfit = 0;
+
+      // Product performance map
+      const prodStats = {};
+      products.forEach(p => {
+        prodStats[p.id] = {
+          name: p.name,
+          ordersCount: 0,
+          unitsSold: 0,
+          revenue: 0,
+          buyCost: 0,
+          expenses: 0,
+          profit: 0
+        };
+      });
+
+      orders.forEach(o => {
+        totalRev += (o.total || 0);
+        totalBuy += (o.totalBuyCost || 0);
+        totalProfit += (o.totalProfit || 0);
+
+        if (o.items) {
+          o.items.forEach(i => {
+            if (!prodStats[i.productId]) {
+              prodStats[i.productId] = {
+                name: i.name,
+                ordersCount: 0,
+                unitsSold: 0,
+                revenue: 0,
+                buyCost: 0,
+                expenses: 0,
+                profit: 0
+              };
+            }
+            const st = prodStats[i.productId];
+            st.ordersCount += 1;
+            st.unitsSold += i.qty;
+            st.revenue += (i.sellingPrice * i.qty);
+            st.buyCost += (i.buyPrice * i.qty);
+            const exp = (i.shippingCost + i.platformFee) * i.qty;
+            st.expenses += exp;
+            st.profit += (i.profit * i.qty);
+            totalExpenses += exp;
+          });
+        }
+      });
+
+      const netMargin = totalRev > 0 ? ((totalProfit / totalRev) * 100).toFixed(1) : 0;
+
+      document.getElementById('pnl-revenue').textContent = Utils.formatINR(totalRev);
+      document.getElementById('pnl-buy-cost').textContent = Utils.formatINR(totalBuy);
+      document.getElementById('pnl-expenses').textContent = Utils.formatINR(totalExpenses);
+      document.getElementById('pnl-net-profit').textContent = Utils.formatINR(totalProfit);
+      document.getElementById('pnl-net-margin').textContent = `Net Profit Margin: ${netMargin}%`;
+
+      // Render Product Profit Table
+      const tbody = document.getElementById('pnl-product-tbody');
+      const sortedProds = Object.values(prodStats).sort((a, b) => b.profit - a.profit);
+
+      tbody.innerHTML = sortedProds.map(st => {
+        const margin = st.revenue > 0 ? ((st.profit / st.revenue) * 100).toFixed(1) : 0;
+
+        return `
+          <tr>
+            <td style="font-weight:700;">${st.name}</td>
+            <td>${st.ordersCount} orders</td>
+            <td style="font-weight:700;">${st.unitsSold} units</td>
+            <td style="font-weight:700;">${Utils.formatINR(st.revenue)}</td>
+            <td style="color:var(--text-muted);">${Utils.formatINR(st.buyCost)}</td>
+            <td style="color:var(--danger);">${Utils.formatINR(st.expenses)}</td>
+            <td style="font-weight:800; color:var(--success);">${Utils.formatINR(st.profit)}</td>
+            <td><span class="badge badge-success">${margin}%</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+  </script>
+</body>
+</html>
