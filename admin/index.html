@@ -79,9 +79,14 @@
     
     <!-- Topbar -->
     <header class="admin-topbar">
-      <div>
-        <h1 class="page-header-title">Dashboard Overview</h1>
-        <p style="color:var(--text-muted); font-size:0.85rem;">Real-time business sales, order fulfillment, and net profit metrics</p>
+      <div style="display:flex; align-items:center;">
+        <button class="mobile-menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <h1 class="page-header-title">Dashboard Overview</h1>
+          <p style="color:var(--text-muted); font-size:0.85rem;">Real-time business sales, order fulfillment, and net profit metrics</p>
+        </div>
       </div>
 
       <div class="admin-topbar-actions">
@@ -267,6 +272,10 @@
           </td>
         </tr>
       `).join('');
+    }
+    function toggleSidebar() {
+      const sb = document.querySelector('.admin-sidebar') || document.querySelector('.supplier-sidebar');
+      if (sb) sb.classList.toggle('mobile-open');
     }
   </script>
 </body>
